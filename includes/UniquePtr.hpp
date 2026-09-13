@@ -4,11 +4,11 @@ template <class T> class UniquePtr{
 
     private:
 
-        T* ptr = nullptr;
+        T* ptr;
 
     public:
 
-        UniquePtr(T* p) : ptr(p){}
+        UniquePtr(T* p = nullptr) : ptr(p){}
 
         ~UniquePtr(){
 
@@ -68,7 +68,7 @@ template <class T> class UniquePtr{
 
         }
 
-        void reset(T* p){
+        void reset(T* p = nullptr){
 
             if (ptr != p){
 

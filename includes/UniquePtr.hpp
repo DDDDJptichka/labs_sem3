@@ -1,0 +1,82 @@
+#pragma once
+
+template <class T> class UniquePtr{
+
+    private:
+
+        T* ptr = nullptr;
+
+    public:
+
+        UniquePtr(T* p) : ptr(p){}
+
+        ~UniquePtr(){
+
+            delete ptr;
+
+        }
+
+        UniquePtr(const UniquePtr&) = delete;
+        UniquePtr& operator=(const UniquePtr&) = delete;
+
+        UniquePtr(UniquePtr&& another){
+
+            ptr = another.ptr;
+            another.ptr = nullptr;
+
+        }
+
+        UniquePtr& operator=(UniquePtr&& another){
+
+            if (this != &another){
+
+                delete ptr;
+
+                ptr = another.ptr;
+                another.ptr = nullptr;
+
+            }
+
+            return *this;
+
+        }
+
+
+        T& operator*() const{
+
+            return *ptr;
+
+        }
+
+        T* operator->() const{
+
+            return ptr;
+
+        }
+
+        T* get() const{
+
+            return ptr;
+
+        }
+
+        T* release(){
+
+            T* tmp = ptr;
+            ptr = nullptr;
+            return tmp;
+
+        }
+
+        void reset(T* p){
+
+            if (ptr != p){
+
+                delete ptr;
+                ptr = p;
+
+            }
+
+        }
+
+};

@@ -9,7 +9,15 @@ template <class T> class SharedPtr{
 
     public:
 
+        SharedPtr(T* p = nullptr) : ptr(p), ref_count(new size_t(1)){}
 
+        SharedPtr(const SharedPtr& another){
+
+            ptr = another.ptr;
+            
+
+        }
+        SharedPtr& operator=(const SharedPtr&) = delete;
 
 };
 

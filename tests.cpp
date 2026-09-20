@@ -116,3 +116,20 @@ TEST(TestUniquePtr, check_operators){
     EXPECT_EQ(c->get(), 10);
 
 }
+
+TEST(TestUniquePtr, check_make_functions){
+
+    auto a = makeUnique<int>(5);
+    auto arr = makeUniqueArray<int>(3);
+
+    arr[0] = 0;
+    arr[1] = 1;
+    arr[2] = 2;
+
+    EXPECT_EQ(*a, 5);
+
+    EXPECT_EQ(arr[0], 0);
+    EXPECT_EQ(arr[1], 1);
+    EXPECT_EQ(arr[2], 2);
+
+}

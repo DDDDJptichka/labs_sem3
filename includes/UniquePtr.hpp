@@ -81,6 +81,12 @@ template <class T> class UniquePtr{
 
 };
 
+template <class T> UniquePtr<T> makeUnique(T value){
+
+    return UniquePtr<T>(new T(value));
+    
+}
+
 template <class T> class UniquePtr<T[]>{
 
     private:
@@ -154,3 +160,9 @@ template <class T> class UniquePtr<T[]>{
         }
 
 };
+
+template <class T> UniquePtr<T[]> makeUniqueArray(size_t size){
+
+    return UniquePtr<T[]>(new T[size]);
+    
+}

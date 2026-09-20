@@ -10,12 +10,6 @@ template <class T> class UniquePtr{
 
         UniquePtr(T* p = nullptr) : ptr(p){}
 
-        ~UniquePtr(){
-
-            delete ptr;
-
-        }
-
         UniquePtr(const UniquePtr&) = delete;
         UniquePtr& operator=(const UniquePtr&) = delete;
 
@@ -23,6 +17,12 @@ template <class T> class UniquePtr{
 
             ptr = another.ptr;
             another.ptr = nullptr;
+
+        }
+
+        ~UniquePtr(){
+
+            delete ptr;
 
         }
 
@@ -81,7 +81,7 @@ template <class T> class UniquePtr{
 
 };
 
-template <class T> UniquePtr<T> makeUnique(T value){
+template <typename T> UniquePtr<T> makeUnique(T value){
 
     return UniquePtr<T>(new T(value));
     
@@ -134,6 +134,12 @@ template <class T> class UniquePtr<T[]>{
 
         }
 
+        const T& operator[](size_t index) const{
+
+            return ptr[index];
+
+        }
+
         T* get() const{
 
             return ptr;
@@ -161,7 +167,7 @@ template <class T> class UniquePtr<T[]>{
 
 };
 
-template <class T> UniquePtr<T[]> makeUniqueArray(size_t size){
+template <typename T> UniquePtr<T[]> makeUniqueArray(size_t size){
 
     return UniquePtr<T[]>(new T[size]);
     

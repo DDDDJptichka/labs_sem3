@@ -1,8 +1,9 @@
 #include <gtest/gtest.h>
 
 #include "includes/UniquePtr.hpp"
+#include "includes/SharedPtr.hpp"
 
-TEST(TestUniquePtr, create){
+TEST(TestUniquePtr, check_create){
 
     UniquePtr<int> a(new int (5));
 

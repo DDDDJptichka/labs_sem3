@@ -164,7 +164,6 @@ TEST(TestSharedPtr, check_make_functions_and_constructors){
     EXPECT_EQ(b[0], 0);
     EXPECT_EQ(b[1], 1);
     EXPECT_EQ(b[2], 2);
-    EXPECT_FALSE(b[3]);
 
     SharedPtr<int> c(nullptr);
     SharedPtr<int[]> arr(nullptr);
@@ -179,7 +178,6 @@ TEST(TestSharedPtr, check_make_functions_and_constructors){
     EXPECT_EQ(arrr[0], 0);
     EXPECT_EQ(arrr[1], 1);
     EXPECT_EQ(arrr[2], 2);
-    EXPECT_FALSE(arrr[3]);
 
     SharedPtr<int> ccc(std::move(cc));
     SharedPtr<int[]> arrrr(std::move(arrr));
@@ -188,8 +186,65 @@ TEST(TestSharedPtr, check_make_functions_and_constructors){
     EXPECT_EQ(arrrr[0], 0);
     EXPECT_EQ(arrrr[1], 1);
     EXPECT_EQ(arrrr[2], 2);
-    EXPECT_FALSE(arrrr[3]);
     EXPECT_EQ(cc.get(), nullptr);
     EXPECT_EQ(arrr.get(), nullptr);
+
+}
+
+TEST(TestSharedPtr, check_methods){
+
+    auto a = makeShared<int>(10);
+    auto b = makeSharedArray<int>(3);
+
+    b[0] = 0;
+    b[1] = 1;
+    b[2] = 2;
+
+    EXPECT_EQ(*a, 10);
+    EXPECT_EQ(b[0], 0);
+    EXPECT_EQ(b[1], 1);
+    EXPECT_EQ(b[2], 2);
+
+    a.reset(new int(20));
+    b.reset(new int[1]{11});
+
+    EXPECT_EQ(*a, 20);
+    EXPECT_EQ(b[0], 11);
+
+    a.reset(a.get());
+    b.reset(b.get());
+
+    EXPECT_EQ(*a, 20);
+    EXPECT_EQ(b[0], 11);
+
+    a.reset(nullptr);
+    b.reset(nullptr);
+
+    EXPECT_EQ(a.get(), nullptr);
+    EXPECT_EQ(b.get(), nullptr);
+    EXPECT_EQ(a.r_count(), 0);
+    EXPECT_EQ(b.r_count(), 0);
+
+    a.reset(new int(10));
+    b.reset(new int[3]{1, 2, 3});
+    SharedPtr<int> c(a);
+    SharedPtr<int[]> arr(b);
+
+    EXPECT_EQ(*c, 10);
+    EXPECT_EQ(c.r_count(), 2);
+    EXPECT_EQ(arr[0], 1);
+    EXPECT_EQ(arr[1], 2);
+    EXPECT_EQ(arr[2], 3);
+    EXPECT_EQ(arr.r_count(), 2);
+
+    a.reset();
+    b.reset();
+
+    EXPECT_EQ(*c, 10);
+    EXPECT_EQ(c.r_count(), 1);
+    EXPECT_EQ(arr[0], 1);
+    EXPECT_EQ(arr[1], 2);
+    EXPECT_EQ(arr[2], 3);
+    EXPECT_EQ(arr.r_count(), 1);
 
 }

@@ -175,6 +175,12 @@ template <class T> class SharedPtr{
 
 };
 
+template <typename T> SharedPtr<T> makeShared(T value){
+
+    return SharedPtr<T>(new T(value));
+    
+}
+
 template <class T> class SharedPtr<T[]>{
 
     private:
@@ -349,3 +355,9 @@ template <class T> class SharedPtr<T[]>{
         }
 
 };
+
+template <typename T> SharedPtr<T[]> makeSharedArray(size_t size){
+
+    return SharedPtr<T[]>(new T[size]);
+    
+}

@@ -134,3 +134,62 @@ TEST(TestUniquePtr, check_make_functions){
     EXPECT_EQ(arr[2], 2);
 
 }
+
+TEST(TestSharedPtr, check_create){
+
+    SharedPtr<int> a(new int(10));
+    SharedPtr<int[]> b(new int[3]);
+
+    b[0] = 0;
+    b[1] = 1;
+    b[2] = 2;
+
+    EXPECT_EQ(*a, 10);
+    EXPECT_EQ(b[0], 0);
+    EXPECT_EQ(b[1], 1);
+    EXPECT_EQ(b[2], 2);
+
+}
+
+TEST(TestSharedPtr, check_make_functions_and_constructors){
+
+    auto a = makeShared<int>(10);
+    auto b = makeSharedArray<int>(3);
+
+    b[0] = 0;
+    b[1] = 1;
+    b[2] = 2;
+
+    EXPECT_EQ(*a, 10);
+    EXPECT_EQ(b[0], 0);
+    EXPECT_EQ(b[1], 1);
+    EXPECT_EQ(b[2], 2);
+    EXPECT_FALSE(b[3]);
+
+    SharedPtr<int> c(nullptr);
+    SharedPtr<int[]> arr(nullptr);
+
+    EXPECT_EQ(c.get(), nullptr);
+    EXPECT_EQ(arr.get(), nullptr);
+
+    SharedPtr<int> cc(a);
+    SharedPtr<int[]> arrr(b);
+
+    EXPECT_EQ(*cc, 10);
+    EXPECT_EQ(arrr[0], 0);
+    EXPECT_EQ(arrr[1], 1);
+    EXPECT_EQ(arrr[2], 2);
+    EXPECT_FALSE(arrr[3]);
+
+    SharedPtr<int> ccc(std::move(cc));
+    SharedPtr<int[]> arrrr(std::move(arrr));
+
+    EXPECT_EQ(*ccc, 10);
+    EXPECT_EQ(arrrr[0], 0);
+    EXPECT_EQ(arrrr[1], 1);
+    EXPECT_EQ(arrrr[2], 2);
+    EXPECT_FALSE(arrrr[3]);
+    EXPECT_EQ(cc.get(), nullptr);
+    EXPECT_EQ(arrr.get(), nullptr);
+
+}

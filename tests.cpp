@@ -248,3 +248,98 @@ TEST(TestSharedPtr, check_methods){
     EXPECT_EQ(arr.r_count(), 1);
 
 }
+
+TEST(TestSharedPtr, check_operators){
+
+    SharedPtr<int> a(new int(5));
+    SharedPtr<int> b;
+    b = a;
+
+    EXPECT_EQ(*a, 5);
+    EXPECT_EQ(*b, 5);
+    EXPECT_EQ(a.r_count(), 2);
+    EXPECT_EQ(b.r_count(), 2);
+
+    SharedPtr<int> c;
+    c = std::move(b);
+
+    EXPECT_EQ(*c, 5);
+    EXPECT_EQ(b.get(), nullptr);
+    EXPECT_EQ(b.r_count(), 0);
+    EXPECT_EQ(a.r_count(), 2);
+    EXPECT_EQ(c.r_count(), 2);
+
+    a = a;
+
+    EXPECT_EQ(*a, 5);
+    EXPECT_EQ(a.r_count(), 2);
+
+    class Test{
+
+        private:
+
+            int val;
+
+        public:
+
+            Test(int value) : val(value){}
+
+            int get(){
+
+                return val;
+
+            }
+
+    };
+
+    SharedPtr<Test> d(new Test(10));
+
+    EXPECT_EQ(d->get(), 10);
+    EXPECT_EQ((*d).get(), 10);
+
+    SharedPtr<int[]> arr1(new int[3]{1, 2, 3});
+    SharedPtr<int[]> arr2;
+
+    EXPECT_EQ(arr1[0], 1);
+    EXPECT_EQ(arr1[1], 2);
+    EXPECT_EQ(arr1[2], 3);
+
+    arr2 = arr1;
+
+    EXPECT_EQ(arr2[0], 1);
+    EXPECT_EQ(arr2[1], 2);
+    EXPECT_EQ(arr2[2], 3);
+    EXPECT_EQ(arr1.r_count(), 2);
+    EXPECT_EQ(arr2.r_count(), 2);
+
+    arr2[1] = 10;
+
+    EXPECT_EQ(arr1[1], 10);
+    EXPECT_EQ(arr2[1], 10);
+
+    SharedPtr<int[]> arr3;
+
+    arr3 = std::move(arr2);
+
+    EXPECT_EQ(arr2.get(), nullptr);
+    EXPECT_EQ(arr2.r_count(), 0);
+    EXPECT_EQ(arr3[0], 1);
+    EXPECT_EQ(arr3[1], 10);
+    EXPECT_EQ(arr3[2], 3);
+    EXPECT_EQ(arr1.r_count(), 2);
+    EXPECT_EQ(arr3.r_count(), 2);
+
+    arr1 = arr1;
+
+    EXPECT_EQ(arr1[0], 1);
+    EXPECT_EQ(arr1[1], 10);
+    EXPECT_EQ(arr1[2], 3);
+    EXPECT_EQ(arr1.r_count(), 2);
+
+    const SharedPtr<int[]>& arr4 = arr3;
+
+    EXPECT_EQ(arr4[0], 1);
+    EXPECT_EQ(arr4[1], 10);
+    EXPECT_EQ(arr4[2], 3);
+
+}

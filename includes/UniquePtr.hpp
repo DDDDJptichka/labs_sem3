@@ -8,12 +8,12 @@ template <class T> class UniquePtr{
 
     public:
 
-        UniquePtr(T* p = nullptr) : ptr(p){}
+        explicit UniquePtr(T* p = nullptr) noexcept : ptr(p){}
 
         UniquePtr(const UniquePtr&) = delete;
         UniquePtr& operator=(const UniquePtr&) = delete;
 
-        UniquePtr(UniquePtr&& another){
+        UniquePtr(UniquePtr&& another) noexcept{
 
             ptr = another.ptr;
             another.ptr = nullptr;
@@ -26,7 +26,7 @@ template <class T> class UniquePtr{
 
         }
 
-        UniquePtr& operator=(UniquePtr&& another){
+        UniquePtr& operator=(UniquePtr&& another) noexcept{
 
             if (this != &another){
 
@@ -42,25 +42,25 @@ template <class T> class UniquePtr{
         }
 
 
-        T& operator*() const{
+        T& operator*() const noexcept{
 
             return *ptr;
 
         }
 
-        T* operator->() const{
+        T* operator->() const noexcept{
 
             return ptr;
 
         }
 
-        T* get() const{
+        T* get() const noexcept{
 
             return ptr;
 
         }
 
-        T* release(){
+        T* release() noexcept{
 
             T* tmp = ptr;
             ptr = nullptr;
@@ -68,7 +68,7 @@ template <class T> class UniquePtr{
 
         }
 
-        void reset(T* p = nullptr){
+        void reset(T* p = nullptr) noexcept{
 
             if (ptr != p){
 
@@ -95,7 +95,7 @@ template <class T> class UniquePtr<T[]>{
 
     public:
 
-        UniquePtr(T* p = nullptr) : ptr(p){}
+        explicit UniquePtr(T* p = nullptr) noexcept : ptr(p){}
 
         ~UniquePtr(){
 
@@ -106,14 +106,14 @@ template <class T> class UniquePtr<T[]>{
         UniquePtr(const UniquePtr&) = delete;
         UniquePtr& operator=(const UniquePtr&) = delete;
 
-        UniquePtr(UniquePtr&& another){
+        UniquePtr(UniquePtr&& another) noexcept{
 
             ptr = another.ptr;
             another.ptr = nullptr;
 
         }
 
-        UniquePtr& operator=(UniquePtr&& another){
+        UniquePtr& operator=(UniquePtr&& another) noexcept{
 
             if (this != &another){
 
@@ -128,25 +128,25 @@ template <class T> class UniquePtr<T[]>{
 
         }
 
-        T& operator[](size_t index){
+        T& operator[](size_t index) noexcept{
 
             return ptr[index];
 
         }
 
-        const T& operator[](size_t index) const{
+        const T& operator[](size_t index) const noexcept{
 
             return ptr[index];
 
         }
 
-        T* get() const{
+        T* get() const noexcept{
 
             return ptr;
 
         }
 
-        T* release(){
+        T* release() noexcept{
 
             T* tmp = ptr;
             ptr = nullptr;
@@ -154,7 +154,7 @@ template <class T> class UniquePtr<T[]>{
 
         }
 
-        void reset(T* p = nullptr){
+        void reset(T* p = nullptr) noexcept{
 
             if (ptr != p){
 

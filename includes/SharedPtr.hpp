@@ -9,7 +9,7 @@ template <class T> class SharedPtr{
 
     public:
 
-        SharedPtr(T* p = nullptr){
+        explicit SharedPtr(T* p = nullptr){
 
             if (p == nullptr){
 
@@ -26,7 +26,7 @@ template <class T> class SharedPtr{
 
         }
 
-        SharedPtr(const SharedPtr& another){
+        SharedPtr(const SharedPtr& another) noexcept{
 
             ptr = another.ptr;
             ref_count = another.ref_count;
@@ -39,7 +39,7 @@ template <class T> class SharedPtr{
 
         }
 
-        SharedPtr(SharedPtr&& another){
+        SharedPtr(SharedPtr&& another) noexcept{
 
             ptr = another.ptr;
             ref_count = another.ref_count;
@@ -64,7 +64,7 @@ template <class T> class SharedPtr{
 
         }
 
-        SharedPtr& operator=(const SharedPtr& another){
+        SharedPtr& operator=(const SharedPtr& another) noexcept{
 
             if (this != &another){
 
@@ -90,7 +90,7 @@ template <class T> class SharedPtr{
     
         }
 
-        SharedPtr& operator=(SharedPtr&& another){
+        SharedPtr& operator=(SharedPtr&& another) noexcept{
 
             if (this != &another){
 
@@ -113,19 +113,19 @@ template <class T> class SharedPtr{
 
         }
 
-        T& operator*() const{
+        T& operator*() const noexcept{
 
             return *ptr;
 
         }
 
-        T* operator->() const{
+        T* operator->() const noexcept{
 
             return ptr;
 
         }
 
-        T* get() const{
+        T* get() const noexcept{
 
             return ptr;
 
@@ -161,7 +161,7 @@ template <class T> class SharedPtr{
 
         }
 
-        size_t r_count() const{
+        size_t r_count() const noexcept{
 
             if (ref_count == nullptr){
 
@@ -190,7 +190,7 @@ template <class T> class SharedPtr<T[]>{
 
     public:
 
-        SharedPtr(T* p = nullptr){
+        explicit SharedPtr(T* p = nullptr){
 
             if (p == nullptr){
 
@@ -207,7 +207,7 @@ template <class T> class SharedPtr<T[]>{
 
         }
 
-        SharedPtr(const SharedPtr& another){
+        SharedPtr(const SharedPtr& another) noexcept{
 
             ptr = another.ptr;
             ref_count = another.ref_count;
@@ -220,7 +220,7 @@ template <class T> class SharedPtr<T[]>{
 
         }
 
-        SharedPtr(SharedPtr&& another){
+        SharedPtr(SharedPtr&& another) noexcept{
 
             ptr = another.ptr;
             ref_count = another.ref_count;
@@ -245,7 +245,7 @@ template <class T> class SharedPtr<T[]>{
 
         }
 
-        SharedPtr& operator=(const SharedPtr& another){
+        SharedPtr& operator=(const SharedPtr& another) noexcept{
 
             if (this != &another){
 
@@ -271,7 +271,7 @@ template <class T> class SharedPtr<T[]>{
     
         }
 
-        SharedPtr& operator=(SharedPtr&& another){
+        SharedPtr& operator=(SharedPtr&& another) noexcept{
 
             if (this != &another){
 
@@ -294,19 +294,19 @@ template <class T> class SharedPtr<T[]>{
 
         }
 
-        T& operator[](size_t index){
+        T& operator[](size_t index) noexcept{
 
             return ptr[index];
 
         }
 
-        const T& operator[](size_t index) const{
+        const T& operator[](size_t index) const noexcept{
 
             return ptr[index];
 
         }
 
-        T* get() const{
+        T* get() const noexcept{
 
             return ptr;
 
@@ -342,7 +342,7 @@ template <class T> class SharedPtr<T[]>{
 
         }
 
-        size_t r_count() const{
+        size_t r_count() const noexcept{
 
             if (ref_count == nullptr){
 

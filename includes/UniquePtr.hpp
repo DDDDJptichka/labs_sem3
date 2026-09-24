@@ -172,3 +172,9 @@ template <typename T> UniquePtr<T[]> makeUniqueArray(size_t size){
     return UniquePtr<T[]>(new T[size]);
     
 }
+
+
+//noexcept
+//explicit
+//тесты разделить
+//в ридми бенчмарки+валгринд закинуть

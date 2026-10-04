@@ -138,6 +138,7 @@ template <class T> class ListSequence : public Sequence<T>{
             LinkedList<T> *concatenated_list = list.concat(&l_list);
             Sequence<T> *res_sequence = new ListSequence<T>(*concatenated_list);
             
+            delete concatenated_list;
             return res_sequence;
 
         }

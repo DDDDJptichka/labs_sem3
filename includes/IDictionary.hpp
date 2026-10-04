@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstddef>
+
 template <class TKey, class TElement> class IDictionary{
 
     public:

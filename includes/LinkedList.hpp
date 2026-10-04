@@ -311,6 +311,60 @@ template <class T> class LinkedList{
         
         }
 
+        void remove_at(int index){
+
+            if ((index >= size) || (index < 0)){
+
+                throw index_out_of_range("Index Out Of Range");
+
+            }
+
+            if (index == 0){
+
+                head = head->next;
+
+                if (head == nullptr){
+
+                    tail.reset();
+
+                }
+                else{
+
+                    head->prev.reset();
+
+                }
+
+                --size;
+                return;
+
+            }
+
+            std::shared_ptr<Node> curr = head;
+
+            for (int i = 0; i < index; ++i){
+
+                curr = curr->next;
+
+            }
+
+            std::shared_ptr<Node> curr_prev = curr->prev.lock();
+            curr_prev->next = curr->next;
+
+            if (curr->next != nullptr){
+
+                curr->next->prev = curr_prev;
+
+            }
+            else{
+
+                tail = curr_prev;
+
+            }
+
+            --size;
+
+        }
+
         LinkedList<T> *concat(LinkedList<T> *list) const{
 
             LinkedList<T> *res_list = new LinkedList<T>;

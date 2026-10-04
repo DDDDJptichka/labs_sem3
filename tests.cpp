@@ -2,6 +2,9 @@
 
 #include "includes/LinkedList.hpp"
 #include "includes/ListSequence.hpp"
+#include "includes/HashTable.hpp"
+#include "includes/Position.hpp"
+#include "includes/Cell.hpp"
 
 TEST(LinkedList, CreateEmpty){
 
@@ -510,5 +513,20 @@ TEST(TestListSequence, concat){
     EXPECT_EQ(result->get(3), 40);
 
     delete result;
+
+}
+
+size_t position_hash(Position pos){
+
+    return pos.get_x() * 337 + pos.get_y() * 228;
+
+}
+
+TEST(TestHashTable, create){
+
+    HashTable<Position, Cell> table(position_hash, 5);
+
+    EXPECT_EQ(table.get_count(), 0);
+    EXPECT_EQ(table.get_capacity(), 5);
 
 }

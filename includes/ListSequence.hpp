@@ -98,6 +98,12 @@ template <class T> class ListSequence : public Sequence<T>{
             return this;
 
         }
+        
+        void remove_at(int index) override{
+
+            list.remove_at(index);
+
+        }
 
         Sequence<T> *get_sub_sequence(int start_index, int end_index) const override{
 

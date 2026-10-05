@@ -562,3 +562,17 @@ TEST(TestHashTable, contains_key){
     EXPECT_FALSE(table.contains_key(Position(3, 2)));
 
 }
+
+TEST(TestHashTable, remove){
+
+    HashTable<Position, Cell> table(position_hash, 5);
+
+    table.add(Position(1, 1), Cell::X);
+
+    EXPECT_EQ(table.get_count(), 1);
+
+    table.remove(Position(1, 1));
+    EXPECT_THROW(table.get(Position(1, 1)), key_not_found);
+    EXPECT_EQ(table.get_count(), 0);
+
+}

@@ -530,3 +530,35 @@ TEST(TestHashTable, create){
     EXPECT_EQ(table.get_capacity(), 5);
 
 }
+
+TEST(TestHashTable, add_get){
+
+    HashTable<Position, Cell> table(position_hash, 5);
+
+    table.add(Position(1, 1), Cell::X);
+    table.add(Position(2, 2), Cell::O);
+    table.add(Position(3, 3), Cell::Empty);
+    
+    EXPECT_EQ(table.get(Position(1, 1)), Cell::X);
+    EXPECT_EQ(table.get(Position(2, 2)), Cell::O);
+    EXPECT_EQ(table.get(Position(3, 3)), Cell::Empty);
+
+}
+
+TEST(TestHashTable, contains_key){
+
+    HashTable<Position, Cell> table(position_hash, 5);
+
+    table.add(Position(1, 1), Cell::X);
+    table.add(Position(2, 2), Cell::O);
+    table.add(Position(3, 3), Cell::Empty);
+    
+    EXPECT_TRUE(table.contains_key(Position(1, 1)));
+    EXPECT_TRUE(table.contains_key(Position(2, 2)));
+    EXPECT_TRUE(table.contains_key(Position(3, 3)));
+    
+    EXPECT_FALSE(table.contains_key(Position(1, 2)));
+    EXPECT_FALSE(table.contains_key(Position(2, 1)));
+    EXPECT_FALSE(table.contains_key(Position(3, 2)));
+
+}

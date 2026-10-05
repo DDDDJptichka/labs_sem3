@@ -38,9 +38,52 @@ template <class TKey, class TElement> class HashTable : public IDictionary<TKey,
 
         }
 
-        TElement get(TKey key) const override{return buckets[0][0].second;}
-        bool contains_key(TKey key) const override{return 1;}
-        void add(TKey key, TElement element) override{}
+        TElement get(TKey key) const override{
+
+            size_t bucket_index = hash_function(key) % capacity;
+            size_t bucket_size = buckets[bucket_index].get_length();
+
+            for (size_t i = 0; i < bucket_size; ++i){
+
+                if (buckets[bucket_index][i].first == key){
+
+                    return buckets[bucket_index][i].second;
+
+                }
+
+            }
+
+            throw key_not_found("Key Not Found");
+
+        }
+        
+        bool contains_key(TKey key) const override{
+
+            size_t bucket_index = hash_function(key) % capacity;
+            size_t bucked_size = buckets[bucket_index].get_length();
+
+            for (size_t i = 0; i < bucked_size; ++i){
+
+                if (buckets[bucket_index][i].first == key){
+
+                    return 1;
+
+                }
+
+            }
+
+            return 0;
+
+        }
+
+        void add(TKey key, TElement element) override{
+
+            size_t bucket_index = hash_function(key) % capacity;
+            buckets[bucket_index].append(std::pair(key, element));
+            ++count;
+
+        }
+        
         void remove(TKey key) override{}
 
 };

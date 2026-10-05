@@ -52,3 +52,11 @@ class not_usable : public exception{
         explicit not_usable(const std::string &msg) : exception(msg){}
 
 };
+
+class key_not_found : public exception{
+
+    public:
+
+        explicit key_not_found(const std::string &msg) : exception(msg){}
+
+};

@@ -18,6 +18,12 @@ template <class TKey, class TElement> class HashTable : public IDictionary<TKey,
 
         HashTable(size_t (*hash_function)(TKey), size_t capacity){
 
+            if (capacity == 0){
+
+                throw invalid_capacity("Invalid Capacity");
+
+            }
+
             this->capacity = capacity;
             this->hash_function = hash_function;
             this->count = 0;
@@ -60,9 +66,9 @@ template <class TKey, class TElement> class HashTable : public IDictionary<TKey,
         bool contains_key(TKey key) const override{
 
             size_t bucket_index = hash_function(key) % capacity;
-            size_t bucked_size = buckets[bucket_index].get_length();
+            size_t bucket_size = buckets[bucket_index].get_length();
 
-            for (size_t i = 0; i < bucked_size; ++i){
+            for (size_t i = 0; i < bucket_size; ++i){
 
                 if (buckets[bucket_index][i].first == key){
 

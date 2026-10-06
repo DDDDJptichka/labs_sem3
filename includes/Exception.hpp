@@ -68,3 +68,11 @@ class key_already_exists : public exception{
         explicit key_already_exists(const std::string &msg) : exception(msg){}
 
 };
+
+class invalid_capacity : public exception{
+
+    public:
+
+        explicit invalid_capacity(const std::string &msg) : exception(msg){}
+
+};

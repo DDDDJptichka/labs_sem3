@@ -60,3 +60,11 @@ class key_not_found : public exception{
         explicit key_not_found(const std::string &msg) : exception(msg){}
 
 };
+
+class key_already_exists : public exception{
+
+    public:
+
+        explicit key_already_exists(const std::string &msg) : exception(msg){}
+
+};

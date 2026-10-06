@@ -543,6 +543,8 @@ TEST(TestHashTable, add_get){
     EXPECT_EQ(table.get(Position(2, 2)), Cell::O);
     EXPECT_EQ(table.get(Position(3, 3)), Cell::Empty);
 
+    EXPECT_THROW(table.add(Position(1, 1), Cell::O), key_already_exists);
+
 }
 
 TEST(TestHashTable, contains_key){

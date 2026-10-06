@@ -78,6 +78,12 @@ template <class TKey, class TElement> class HashTable : public IDictionary<TKey,
 
         void add(TKey key, TElement element) override{
 
+            if (contains_key(key) == 1){
+
+                throw key_already_exists("Key Already Exists");
+
+            }
+
             size_t bucket_index = hash_function(key) % capacity;
             buckets[bucket_index].append(std::pair(key, element));
             ++count;

@@ -686,3 +686,19 @@ TEST(TestBoard, check_win_3){
     EXPECT_TRUE(board.check_win(Position(4, 4), Cell::X));
 
 }
+
+TEST(TestBoard, possible_move){
+
+    Board board(position_hash, 9);
+    board.make_move(Position(0, 0), Cell::X);
+    
+    EXPECT_TRUE(board.is_move_possible(Position(0, 1)));
+    EXPECT_TRUE(board.is_move_possible(Position(0, -1)));
+    EXPECT_TRUE(board.is_move_possible(Position(1, 0)));
+    EXPECT_TRUE(board.is_move_possible(Position(-1, 0)));
+    EXPECT_TRUE(board.is_move_possible(Position(1, 1)));
+    EXPECT_TRUE(board.is_move_possible(Position(1, -1)));
+    EXPECT_TRUE(board.is_move_possible(Position(-1, 1)));
+    EXPECT_TRUE(board.is_move_possible(Position(-1, -1)));
+
+}

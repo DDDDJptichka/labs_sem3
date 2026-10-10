@@ -9,10 +9,11 @@ class Board{
     private:
 
         HashTable<Position, Cell> board;
+        HashTable<Position, size_t> possible_moves;
 
     public:
 
-        Board(size_t (*hash_function)(Position), size_t capacity) : board(hash_function, capacity){}
+        Board(size_t (*hash_function)(Position), size_t capacity) : board(hash_function, capacity), possible_moves(hash_function, capacity){}
 
         size_t get_capacity() const{
 
@@ -41,6 +42,35 @@ class Board{
         void make_move(Position pos, Cell elem){
 
             board.add(pos, elem);
+
+            if (possible_moves.contains_key(pos)){
+
+                possible_moves.remove(pos);
+
+            }
+
+            int dirs[8][2] = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}, {1, 1}, {-1, 1}, {1, -1}, {-1, -1}};
+
+            for(auto &dir : dirs){
+
+                Position possib_pos = pos + Position(dir[0], dir[1]);
+
+                if (possible_moves.contains_key(possib_pos)){
+
+                    possible_moves[possib_pos]++;
+
+                }
+                else{
+
+                    if (board.contains_key(possib_pos) == 0){
+
+                        possible_moves.add(possib_pos, 1);
+
+                    }
+
+                }
+
+            }
 
         }
 
@@ -80,6 +110,12 @@ class Board{
             }
 
             return false;
+
+        }
+
+        bool is_move_possible(Position pos){
+
+            return possible_moves.contains_key(pos);
 
         }
 

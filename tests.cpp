@@ -687,7 +687,7 @@ TEST(TestBoard, check_win_3){
 
 }
 
-TEST(TestBoard, possible_move){
+TEST(TestBoard, possible_move_1){
 
     Board board(position_hash, 9);
     board.make_move(Position(0, 0), Cell::X);
@@ -700,5 +700,59 @@ TEST(TestBoard, possible_move){
     EXPECT_TRUE(board.is_move_possible(Position(1, -1)));
     EXPECT_TRUE(board.is_move_possible(Position(-1, 1)));
     EXPECT_TRUE(board.is_move_possible(Position(-1, -1)));
+
+    EXPECT_EQ(board.get_possible_moves_count(), 8);
+
+}
+
+TEST(TestBoard, possible_move_2){
+
+    Board board(position_hash, 9);
+    
+    board.make_move(Position(0, 0), Cell::X);
+    board.make_move(Position(1, 0), Cell::O);
+    
+    EXPECT_TRUE(board.is_move_possible(Position(0, 1)));
+    EXPECT_TRUE(board.is_move_possible(Position(0, -1)));
+    EXPECT_TRUE(board.is_move_possible(Position(-1, 0)));
+    EXPECT_TRUE(board.is_move_possible(Position(1, 1)));
+    EXPECT_TRUE(board.is_move_possible(Position(1, -1)));
+    EXPECT_TRUE(board.is_move_possible(Position(-1, 1)));
+    EXPECT_TRUE(board.is_move_possible(Position(-1, -1)));
+
+    EXPECT_TRUE(board.is_move_possible(Position(2, 0)));
+    EXPECT_TRUE(board.is_move_possible(Position(2, -1)));
+    EXPECT_TRUE(board.is_move_possible(Position(2, 1)));
+
+    EXPECT_EQ(board.get_possible_moves_count(), 10);
+
+}
+
+TEST(TestBoard, possible_move_3){
+
+    Board board(position_hash, 9);
+    
+    board.make_move(Position(0, 0), Cell::X);
+    board.make_move(Position(3, 3), Cell::O);
+    
+    EXPECT_TRUE(board.is_move_possible(Position(0, 1)));
+    EXPECT_TRUE(board.is_move_possible(Position(0, -1)));
+    EXPECT_TRUE(board.is_move_possible(Position(1, 0)));
+    EXPECT_TRUE(board.is_move_possible(Position(-1, 0)));
+    EXPECT_TRUE(board.is_move_possible(Position(1, 1)));
+    EXPECT_TRUE(board.is_move_possible(Position(1, -1)));
+    EXPECT_TRUE(board.is_move_possible(Position(-1, 1)));
+    EXPECT_TRUE(board.is_move_possible(Position(-1, -1)));
+
+    EXPECT_TRUE(board.is_move_possible(Position(3, 4)));
+    EXPECT_TRUE(board.is_move_possible(Position(3, 2)));
+    EXPECT_TRUE(board.is_move_possible(Position(4, 3)));
+    EXPECT_TRUE(board.is_move_possible(Position(2, 3)));
+    EXPECT_TRUE(board.is_move_possible(Position(4, 4)));
+    EXPECT_TRUE(board.is_move_possible(Position(4, 2)));
+    EXPECT_TRUE(board.is_move_possible(Position(2, 4)));
+    EXPECT_TRUE(board.is_move_possible(Position(2, 2)));
+    
+    EXPECT_EQ(board.get_possible_moves_count(), 16);
 
 }

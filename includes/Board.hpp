@@ -78,6 +78,42 @@ class Board{
 
             board.remove(pos);
 
+            size_t neighb_count = 0;
+            int dirs[8][2] = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}, {1, 1}, {-1, 1}, {1, -1}, {-1, -1}};
+
+            for (auto &dir : dirs){
+
+                Position del_pos = pos + Position(dir[0], dir[1]);
+
+                if (board.contains_key(del_pos)){
+
+                    ++neighb_count;
+
+                }
+
+                if (possible_moves.contains_key(del_pos)){
+
+                    if (possible_moves.get(del_pos) == 1){
+
+                        possible_moves.remove(del_pos);
+
+                    }
+                    else{
+
+                        --possible_moves[del_pos];
+
+                    }
+
+                }
+
+            }
+
+            if (neighb_count > 0){
+
+                possible_moves.add(pos, neighb_count);
+
+            }
+
         }
 
         bool check_win(Position pos, Cell cell){
@@ -113,9 +149,21 @@ class Board{
 
         }
 
-        bool is_move_possible(Position pos){
+        bool is_move_possible(Position pos) const{
 
             return possible_moves.contains_key(pos);
+
+        }
+
+        size_t neighbour_count(Position pos) const{
+
+            return possible_moves.get(pos);
+
+        }
+
+        size_t get_possible_moves_count() const{
+
+            return possible_moves.get_count();
 
         }
 

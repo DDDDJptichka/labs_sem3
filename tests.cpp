@@ -607,3 +607,16 @@ TEST(TestBoard, is_free){
     EXPECT_TRUE(board.is_free(Position(1, 2)));
 
 }
+
+TEST(TestBoard, remove_move){
+
+    Board board(position_hash, 9);
+    board.make_move(Position(1, 1), Cell::X);
+    
+    EXPECT_EQ(board.get_cell(Position(1, 1)), Cell::X);
+
+    board.remove_move(Position(1, 1));
+    
+    EXPECT_TRUE(board.is_free(Position(1, 1)));
+
+}

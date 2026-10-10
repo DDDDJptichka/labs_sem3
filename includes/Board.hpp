@@ -44,4 +44,10 @@ class Board{
 
         }
 
+        void remove_move(Position pos){
+
+            board.remove(pos);
+
+        }
+
 };

@@ -580,6 +580,18 @@ TEST(TestHashTable, remove){
 
 }
 
+TEST(TestHashTable, operator_kv_skobki){
+
+    HashTable<Position, Cell> table(position_hash, 5);
+
+    table.add(Position(1, 1), Cell::X);
+    table[Position(1, 1)] = Cell::O;
+
+    EXPECT_EQ(table.get_count(), 1);
+    EXPECT_EQ(table.get(Position(1, 1)), Cell::O);
+
+}
+
 TEST(TestBoard, create){
 
     Board board(position_hash, 64);

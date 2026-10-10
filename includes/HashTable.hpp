@@ -118,4 +118,26 @@ template <class TKey, class TElement> class HashTable : public IDictionary<TKey,
 
         }
 
+        TElement& operator[](TKey key){
+
+            size_t bucket_index = hash_function(key) % capacity;
+            size_t bucket_size = buckets[bucket_index].get_length();
+
+            for (size_t i = 0; i < bucket_size; ++i){
+
+                if (buckets[bucket_index][i].first == key){
+
+                    return buckets[bucket_index][i].second;
+
+                }
+
+            }
+
+            buckets[bucket_index].append(std::pair(key, TElement{}));
+            ++count;
+
+            return buckets[bucket_index][bucket_size].second;
+
+        }
+
 };

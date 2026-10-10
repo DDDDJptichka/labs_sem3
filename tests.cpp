@@ -620,3 +620,57 @@ TEST(TestBoard, remove_move){
     EXPECT_TRUE(board.is_free(Position(1, 1)));
 
 }
+
+TEST(TestBoard, check_win_1){
+
+    Board board(position_hash, 50);
+
+    board.make_move(Position(0, 0), Cell::X);
+    board.make_move(Position(1, 0), Cell::X);
+    board.make_move(Position(2, 0), Cell::X);
+    board.make_move(Position(3, 0), Cell::X);
+    board.make_move(Position(4, 0), Cell::X);
+
+    EXPECT_TRUE(board.check_win(Position(0, 0), Cell::X));
+    EXPECT_TRUE(board.check_win(Position(1, 0), Cell::X));
+    EXPECT_TRUE(board.check_win(Position(2, 0), Cell::X));
+    EXPECT_TRUE(board.check_win(Position(3, 0), Cell::X));
+    EXPECT_TRUE(board.check_win(Position(4, 0), Cell::X));
+
+}
+
+TEST(TestBoard, check_win_2){
+
+    Board board(position_hash, 50);
+
+    board.make_move(Position(0, 0), Cell::X);
+    board.make_move(Position(0, 1), Cell::X);
+    board.make_move(Position(0, 2), Cell::X);
+    board.make_move(Position(0, 3), Cell::X);
+    board.make_move(Position(0, 4), Cell::X);
+
+    EXPECT_TRUE(board.check_win(Position(0, 0), Cell::X));
+    EXPECT_TRUE(board.check_win(Position(0, 1), Cell::X));
+    EXPECT_TRUE(board.check_win(Position(0, 2), Cell::X));
+    EXPECT_TRUE(board.check_win(Position(0, 3), Cell::X));
+    EXPECT_TRUE(board.check_win(Position(0, 4), Cell::X));
+
+}
+
+TEST(TestBoard, check_win_3){
+
+    Board board(position_hash, 50);
+
+    board.make_move(Position(0, 0), Cell::X);
+    board.make_move(Position(1, 1), Cell::X);
+    board.make_move(Position(2, 2), Cell::X);
+    board.make_move(Position(3, 3), Cell::X);
+    board.make_move(Position(4, 4), Cell::X);
+
+    EXPECT_TRUE(board.check_win(Position(0, 0), Cell::X));
+    EXPECT_TRUE(board.check_win(Position(1, 1), Cell::X));
+    EXPECT_TRUE(board.check_win(Position(2, 2), Cell::X));
+    EXPECT_TRUE(board.check_win(Position(3, 3), Cell::X));
+    EXPECT_TRUE(board.check_win(Position(4, 4), Cell::X));
+
+}

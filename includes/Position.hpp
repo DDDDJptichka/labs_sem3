@@ -29,4 +29,10 @@ class Position{
 
         }
 
+        Position operator+(const Position& another) const{
+
+            return Position(x + another.get_x(), y + another.get_y());
+
+        }
+
 };

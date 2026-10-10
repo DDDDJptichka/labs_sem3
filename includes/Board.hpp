@@ -50,4 +50,37 @@ class Board{
 
         }
 
+        bool check_win(Position pos, Cell cell){
+
+            int dirs[3][2][2] = {{{-1, 0}, {1, 0}}, {{0, -1}, {0, 1}}, {{-1, -1}, {1, 1}}};
+
+            for (auto &dir : dirs){
+
+                size_t count = 1;
+
+                for (auto &d : dir){
+
+                    Position curr_pos = pos;
+                    
+                    while (cell == get_cell(curr_pos + Position(d[0], d[1]))){
+
+                        curr_pos = curr_pos + Position(d[0], d[1]);
+                        ++count;
+
+                        if (count >= 5){
+
+                            return true;
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+            return false;
+
+        }
+
 };

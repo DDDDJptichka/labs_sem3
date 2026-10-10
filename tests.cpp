@@ -5,6 +5,7 @@
 #include "includes/HashTable.hpp"
 #include "includes/Position.hpp"
 #include "includes/Cell.hpp"
+#include "includes/Board.hpp"
 
 TEST(LinkedList, CreateEmpty){
 
@@ -576,5 +577,33 @@ TEST(TestHashTable, remove){
     table.remove(Position(1, 1));
     EXPECT_THROW(table.get(Position(1, 1)), key_not_found);
     EXPECT_EQ(table.get_count(), 0);
+
+}
+
+TEST(TestBoard, create){
+
+    Board board(position_hash, 64);
+    
+    EXPECT_EQ(board.get_capacity(), 64);
+
+}
+
+TEST(TestBoard, make_move){
+
+    Board board(position_hash, 9);
+    board.make_move(Position(1, 1), Cell::X);
+    
+    EXPECT_EQ(board.get_cell(Position(1, 1)), Cell::X);
+    EXPECT_EQ(board.get_cell(Position(2, 3)), Cell::Empty);
+
+}
+
+TEST(TestBoard, is_free){
+
+    Board board(position_hash, 9);
+    board.make_move(Position(1, 1), Cell::X);
+    
+    EXPECT_FALSE(board.is_free(Position(1, 1)));
+    EXPECT_TRUE(board.is_free(Position(1, 2)));
 
 }

@@ -687,6 +687,24 @@ TEST(TestBoard, check_win_3){
 
 }
 
+TEST(TestBoard, check_win_4){
+
+    Board board(position_hash, 50);
+
+    board.make_move(Position(0, 0), Cell::X);
+    board.make_move(Position(-1, 1), Cell::X);
+    board.make_move(Position(-2, 2), Cell::X);
+    board.make_move(Position(-3, 3), Cell::X);
+    board.make_move(Position(-4, 4), Cell::X);
+
+    EXPECT_TRUE(board.check_win(Position(0, 0), Cell::X));
+    EXPECT_TRUE(board.check_win(Position(-1, 1), Cell::X));
+    EXPECT_TRUE(board.check_win(Position(-2, 2), Cell::X));
+    EXPECT_TRUE(board.check_win(Position(-3, 3), Cell::X));
+    EXPECT_TRUE(board.check_win(Position(-4, 4), Cell::X));
+
+}
+
 TEST(TestBoard, possible_move_1){
 
     Board board(position_hash, 9);
@@ -754,5 +772,20 @@ TEST(TestBoard, possible_move_3){
     EXPECT_TRUE(board.is_move_possible(Position(2, 2)));
     
     EXPECT_EQ(board.get_possible_moves_count(), 16);
+
+}
+
+TEST(TestBoard, remove_possible_moves_1){
+
+    Board board(position_hash, 9);
+    board.make_move(Position(1, 1), Cell::X);
+    
+    EXPECT_EQ(board.get_cell(Position(1, 1)), Cell::X);
+
+    board.remove_move(Position(1, 1));
+    
+    EXPECT_TRUE(board.is_free(Position(1, 1)));
+    EXPECT_TRUE(board.is_move_possible(Position(0, 0)));
+    EXPECT_EQ(board.get_possible_moves_count(), 1);
 
 }

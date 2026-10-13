@@ -11,24 +11,24 @@ template <class TKey, class TElement> class HashTable : public IDictionary<TKey,
 
         std::unique_ptr<ListSequence<std::pair<TKey, TElement>>[]> buckets;
         size_t count;
-        size_t capacity;
+        size_t bucket_count;
         size_t (*hash_function)(TKey);
 
     public:
 
-        HashTable(size_t (*hash_function)(TKey), size_t capacity){
+        HashTable(size_t (*hash_function)(TKey), size_t bucket_count){
 
-            if (capacity == 0){
+            if (bucket_count == 0){
 
                 throw invalid_capacity("Invalid Capacity");
 
             }
 
-            this->capacity = capacity;
+            this->bucket_count = bucket_count;
             this->hash_function = hash_function;
             this->count = 0;
 
-            buckets = std::make_unique<ListSequence<std::pair<TKey, TElement>>[]>(capacity);
+            buckets = std::make_unique<ListSequence<std::pair<TKey, TElement>>[]>(bucket_count);
 
         }
 
@@ -40,13 +40,13 @@ template <class TKey, class TElement> class HashTable : public IDictionary<TKey,
 
         size_t get_capacity() const override{
 
-            return capacity;
+            return bucket_count;
 
         }
 
         TElement get(TKey key) const override{
 
-            size_t bucket_index = hash_function(key) % capacity;
+            size_t bucket_index = hash_function(key) % bucket_count;
             size_t bucket_size = buckets[bucket_index].get_length();
 
             for (size_t i = 0; i < bucket_size; ++i){
@@ -65,7 +65,7 @@ template <class TKey, class TElement> class HashTable : public IDictionary<TKey,
         
         bool contains_key(TKey key) const override{
 
-            size_t bucket_index = hash_function(key) % capacity;
+            size_t bucket_index = hash_function(key) % bucket_count;
             size_t bucket_size = buckets[bucket_index].get_length();
 
             for (size_t i = 0; i < bucket_size; ++i){
@@ -90,7 +90,7 @@ template <class TKey, class TElement> class HashTable : public IDictionary<TKey,
 
             }
 
-            size_t bucket_index = hash_function(key) % capacity;
+            size_t bucket_index = hash_function(key) % bucket_count;
             buckets[bucket_index].append(std::pair(key, element));
             ++count;
 
@@ -98,7 +98,7 @@ template <class TKey, class TElement> class HashTable : public IDictionary<TKey,
 
         void remove(TKey key) override{
 
-            size_t bucket_index = hash_function(key) % capacity;
+            size_t bucket_index = hash_function(key) % bucket_count;
             size_t bucket_size = buckets[bucket_index].get_length();
 
             for (size_t i = 0; i < bucket_size; ++i){
@@ -120,7 +120,7 @@ template <class TKey, class TElement> class HashTable : public IDictionary<TKey,
 
         TElement& operator[](TKey key){
 
-            size_t bucket_index = hash_function(key) % capacity;
+            size_t bucket_index = hash_function(key) % bucket_count;
             size_t bucket_size = buckets[bucket_index].get_length();
 
             for (size_t i = 0; i < bucket_size; ++i){

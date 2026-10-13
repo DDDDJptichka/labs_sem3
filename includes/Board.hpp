@@ -13,7 +13,7 @@ class Board{
 
     public:
 
-        Board(size_t (*hash_function)(Position), size_t capacity) : board(hash_function, capacity), possible_moves(hash_function, capacity){}
+        Board(size_t (*hash_function)(Position), size_t bucket_count) : board(hash_function, bucket_count), possible_moves(hash_function, bucket_count){}
 
         size_t get_capacity() const{
 
@@ -118,7 +118,7 @@ class Board{
 
         bool check_win(Position pos, Cell cell){
 
-            int dirs[3][2][2] = {{{-1, 0}, {1, 0}}, {{0, -1}, {0, 1}}, {{-1, -1}, {1, 1}}};
+            int dirs[4][2][2] = {{{-1, 0}, {1, 0}}, {{0, -1}, {0, 1}}, {{-1, -1}, {1, 1}}, {{-1, 1}, {1, -1}}};
 
             for (auto &dir : dirs){
 
@@ -151,17 +151,35 @@ class Board{
 
         bool is_move_possible(Position pos) const{
 
+            if ((possible_moves.get_count() == 0) && (board.get_count() == 0)){
+
+                return (Position(0, 0) == pos);
+
+            }
+
             return possible_moves.contains_key(pos);
 
         }
 
         size_t neighbour_count(Position pos) const{
 
+            if ((board.get_count() == 0) && (pos == Position(0, 0))){
+
+                return 0;
+
+            }
+
             return possible_moves.get(pos);
 
         }
 
         size_t get_possible_moves_count() const{
+
+            if ((possible_moves.get_count() == 0) && (board.get_count() == 0)){
+
+                return 1;
+
+            }
 
             return possible_moves.get_count();
 

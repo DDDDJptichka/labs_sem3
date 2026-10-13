@@ -787,5 +787,137 @@ TEST(TestBoard, remove_possible_moves_1){
     EXPECT_TRUE(board.is_free(Position(1, 1)));
     EXPECT_TRUE(board.is_move_possible(Position(0, 0)));
     EXPECT_EQ(board.get_possible_moves_count(), 1);
+    EXPECT_EQ(board.neighbour_count(Position(0, 0)), 0);
+
+}
+
+TEST(TestBoard, remove_possible_moves_2){
+
+    Board board(position_hash, 9);
+
+    board.make_move(Position(0, 0), Cell::X);
+    board.make_move(Position(1, 0), Cell::O);
+
+    EXPECT_TRUE(board.is_move_possible(Position(-1, 0)));
+    EXPECT_TRUE(board.is_move_possible(Position(-1, 1)));
+    EXPECT_TRUE(board.is_move_possible(Position(-1, -1)));
+    EXPECT_TRUE(board.is_move_possible(Position(0, 1)));
+    EXPECT_TRUE(board.is_move_possible(Position(1, 1)));
+    EXPECT_TRUE(board.is_move_possible(Position(2, 1)));
+    EXPECT_TRUE(board.is_move_possible(Position(2, 0)));
+    EXPECT_TRUE(board.is_move_possible(Position(2, -1)));
+    EXPECT_TRUE(board.is_move_possible(Position(1, -1)));
+    EXPECT_TRUE(board.is_move_possible(Position(0, -1)));
+    EXPECT_EQ(board.get_possible_moves_count(), 10);
+
+    EXPECT_EQ(board.neighbour_count(Position(-1, 0)), 1);
+    EXPECT_EQ(board.neighbour_count(Position(-1, 1)), 1);
+    EXPECT_EQ(board.neighbour_count(Position(-1, -1)), 1);
+    EXPECT_EQ(board.neighbour_count(Position(0, 1)), 2);
+    EXPECT_EQ(board.neighbour_count(Position(1, 1)), 2);
+    EXPECT_EQ(board.neighbour_count(Position(1, -1)), 2);
+    EXPECT_EQ(board.neighbour_count(Position(0, -1)), 2);
+    EXPECT_EQ(board.neighbour_count(Position(2, 1)), 1);
+    EXPECT_EQ(board.neighbour_count(Position(2, 0)), 1);
+    EXPECT_EQ(board.neighbour_count(Position(2, -1)), 1);
+
+}
+
+TEST(TestBoard, remove_possible_moves_3){
+
+    Board board(position_hash, 9);
+
+    board.make_move(Position(0, 0), Cell::X);
+    board.make_move(Position(1, 0), Cell::O);
+    board.remove_move(Position(1, 0));
+
+    EXPECT_TRUE(board.is_move_possible(Position(-1, 0)));
+    EXPECT_TRUE(board.is_move_possible(Position(-1, 1)));
+    EXPECT_TRUE(board.is_move_possible(Position(-1, -1)));
+    EXPECT_TRUE(board.is_move_possible(Position(0, 1)));
+    EXPECT_TRUE(board.is_move_possible(Position(1, 1)));
+    EXPECT_TRUE(board.is_move_possible(Position(1, -1)));
+    EXPECT_TRUE(board.is_move_possible(Position(0, -1)));
+    EXPECT_TRUE(board.is_move_possible(Position(1, 1)));
+    EXPECT_EQ(board.get_possible_moves_count(), 8);
+
+    EXPECT_EQ(board.neighbour_count(Position(-1, 0)), 1);
+    EXPECT_EQ(board.neighbour_count(Position(-1, 1)), 1);
+    EXPECT_EQ(board.neighbour_count(Position(-1, -1)), 1);
+    EXPECT_EQ(board.neighbour_count(Position(0, 1)), 1);
+    EXPECT_EQ(board.neighbour_count(Position(1, 1)), 1);
+    EXPECT_EQ(board.neighbour_count(Position(1, -1)), 1);
+    EXPECT_EQ(board.neighbour_count(Position(0, -1)), 1);
+    EXPECT_EQ(board.neighbour_count(Position(1, 1)), 1);
+
+}
+
+TEST(TestBoard, remove_possible_moves_4){
+
+    Board board(position_hash, 9);
+
+    board.make_move(Position(0, 0), Cell::X);
+    board.make_move(Position(1, 0), Cell::O);
+    board.make_move(Position(1, 1), Cell::X);
+    board.remove_move(Position(1, 0));
+
+    EXPECT_TRUE(board.is_move_possible(Position(-1, 0)));
+    EXPECT_TRUE(board.is_move_possible(Position(-1, 1)));
+    EXPECT_TRUE(board.is_move_possible(Position(-1, -1)));
+    EXPECT_TRUE(board.is_move_possible(Position(0, 1)));
+    EXPECT_TRUE(board.is_move_possible(Position(0, 2)));
+    EXPECT_TRUE(board.is_move_possible(Position(1, 2)));
+    EXPECT_TRUE(board.is_move_possible(Position(2, 2)));
+    EXPECT_TRUE(board.is_move_possible(Position(2, 1)));
+    EXPECT_TRUE(board.is_move_possible(Position(2, 0)));
+    EXPECT_TRUE(board.is_move_possible(Position(1, 0)));
+    EXPECT_TRUE(board.is_move_possible(Position(1, -1)));
+    EXPECT_TRUE(board.is_move_possible(Position(0, -1)));
+
+    EXPECT_EQ(board.get_possible_moves_count(), 12);
+
+    EXPECT_EQ(board.neighbour_count(Position(-1, 0)), 1);
+    EXPECT_EQ(board.neighbour_count(Position(-1, 1)), 1);
+    EXPECT_EQ(board.neighbour_count(Position(-1, -1)), 1);
+    EXPECT_EQ(board.neighbour_count(Position(0, 1)), 2);
+    EXPECT_EQ(board.neighbour_count(Position(0, 2)), 1);
+    EXPECT_EQ(board.neighbour_count(Position(1, 2)), 1);
+    EXPECT_EQ(board.neighbour_count(Position(2, 2)), 1);
+    EXPECT_EQ(board.neighbour_count(Position(2, 1)), 1);
+    EXPECT_EQ(board.neighbour_count(Position(2, 0)), 1);
+    EXPECT_EQ(board.neighbour_count(Position(1, 0)), 2);
+    EXPECT_EQ(board.neighbour_count(Position(1, -1)), 1);
+    EXPECT_EQ(board.neighbour_count(Position(0, -1)), 1);
+
+}
+
+TEST(TestBoard, remove_possible_moves_5){
+
+    Board board(position_hash, 9);
+
+    board.make_move(Position(-1, 0), Cell::O);
+    board.make_move(Position(0, 0), Cell::X);
+    board.make_move(Position(1, 0), Cell::O);
+    board.make_move(Position(-1, 1), Cell::X);
+    board.make_move(Position(0, 1), Cell::O);
+    board.make_move(Position(1, 1), Cell::X);
+    board.make_move(Position(-1, 2), Cell::O);
+    board.make_move(Position(0, 2), Cell::X);
+    board.make_move(Position(1, 2), Cell::O);
+
+    board.remove_move(Position(1, 1));
+
+    EXPECT_TRUE(board.is_move_possible(Position(1, 1)));
+
+    EXPECT_FALSE(board.is_move_possible(Position(-1, 0)));
+    EXPECT_FALSE(board.is_move_possible(Position(0, 0)));
+    EXPECT_FALSE(board.is_move_possible(Position(1, 0)));
+    EXPECT_FALSE(board.is_move_possible(Position(-1, 1)));
+    EXPECT_FALSE(board.is_move_possible(Position(0, 1)));
+    EXPECT_FALSE(board.is_move_possible(Position(-1, 2)));
+    EXPECT_FALSE(board.is_move_possible(Position(0, 2)));
+    EXPECT_FALSE(board.is_move_possible(Position(1, 2)));
+
+    EXPECT_EQ(board.get_possible_moves_count(), 17);
 
 }

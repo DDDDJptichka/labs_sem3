@@ -921,3 +921,35 @@ TEST(TestBoard, remove_possible_moves_5){
     EXPECT_EQ(board.get_possible_moves_count(), 17);
 
 }
+
+TEST(TestBoard, get_keys_empty){
+
+    HashTable<Position, Cell> table(position_hash, 9);
+
+    EXPECT_EQ(table.get_keys(), ListSequence<Position>{});
+
+}
+
+TEST(TestBoard, get_keys_from_empty_board){
+
+    Board board(position_hash, 9);
+
+    EXPECT_EQ(board.get_possible_moves(), ListSequence<Position>{Position(0, 0)});
+
+}
+
+TEST(TestBoard, get_keys_from_not_empty_board){
+
+    Board board(position_hash, 9);
+    board.make_move(Position(0, 0), Cell::X);
+
+    ListSequence<Position> poss_moves = board.get_possible_moves();
+    size_t len = poss_moves.get_length();
+
+    for (size_t i = 0; i < len; ++i){
+
+        EXPECT_TRUE(board.is_move_possible(poss_moves[i]));
+
+    }
+
+}

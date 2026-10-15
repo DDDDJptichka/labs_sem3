@@ -118,6 +118,26 @@ template <class TKey, class TElement> class HashTable : public IDictionary<TKey,
 
         }
 
+        ListSequence<TKey> get_keys() const{
+
+            ListSequence<TKey> keys;
+
+            for (size_t i = 0; i < bucket_count; ++i){
+
+                size_t len = buckets[i].get_length();
+
+                for (size_t j = 0; j < len; ++j){
+
+                    keys.append(buckets[i][j].first);
+
+                }
+
+            }
+
+            return keys;
+
+        }
+
         TElement& operator[](TKey key){
 
             size_t bucket_index = hash_function(key) % bucket_count;

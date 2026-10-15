@@ -37,6 +37,16 @@ template <class T> class ListSequence : public Sequence<T>{
 
         ListSequence(const ListSequence<T> &another) : list(another.list){}
 
+        ListSequence(std::initializer_list<T> elements){
+
+            for (const T& elem : elements){
+
+                list.append(elem);
+
+            }
+
+        }
+
         ~ListSequence() override{}
 
         T get_first() const override{
@@ -162,6 +172,31 @@ template <class T> class ListSequence : public Sequence<T>{
             ListSequence<T> new_seq(list + other.list);
 
             return new_seq;
+
+        }
+
+        bool operator==(const ListSequence<T> &other) const{
+
+            size_t other_len = other.get_length();
+            size_t len = list.get_length();
+
+            if (other_len != len){
+
+                return false;
+
+            }
+
+            for (size_t i = 0; i < len; ++i){
+
+                if (list[i] != other[i]){
+
+                    return false;
+
+                }
+
+            }
+
+            return true;
 
         }
 

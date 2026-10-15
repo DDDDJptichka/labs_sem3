@@ -173,6 +173,21 @@ class Board{
 
         }
 
+        ListSequence<Position> get_possible_moves() const{
+
+            if (board.get_count() == 0){
+
+                ListSequence<Position> moves;
+                moves.append(Position(0, 0));
+
+                return moves;
+
+            }
+
+            return possible_moves.get_keys();
+
+        }
+
         size_t get_possible_moves_count() const{
 
             if ((possible_moves.get_count() == 0) && (board.get_count() == 0)){

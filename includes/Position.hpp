@@ -29,6 +29,12 @@ class Position{
 
         }
 
+        bool operator!=(const Position& another) const{
+
+            return !((x == another.x) && (y == another.y));
+
+        }
+
         Position operator+(const Position& another) const{
 
             return Position(x + another.get_x(), y + another.get_y());

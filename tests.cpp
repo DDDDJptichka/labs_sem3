@@ -6,6 +6,7 @@
 #include "includes/Position.hpp"
 #include "includes/Cell.hpp"
 #include "includes/Board.hpp"
+#include "includes/Bot.hpp"
 
 TEST(LinkedList, CreateEmpty){
 
@@ -952,4 +953,64 @@ TEST(TestBoard, get_keys_from_not_empty_board){
 
     }
 
+}
+
+TEST(TestBot, evaluate_pattern_1){
+
+    Board board(position_hash, 9);
+    Bot bot(Cell::X);
+
+    board.make_move(Position(0, 0), Cell::X);
+    board.make_move(Position(0, 1), Cell::X);
+
+    EXPECT_EQ(bot.evaluate_pattern(board, Position(0, 2), Cell::X), 10000 + 6);
+
+}
+
+TEST(TestBot, evaluate_pattern_2){
+
+    Board board(position_hash, 9);
+    Bot bot(Cell::X);
+
+    board.make_move(Position(0, 0), Cell::X);
+    board.make_move(Position(0, 1), Cell::X);
+    board.make_move(Position(1, 1), Cell::O);
+
+    EXPECT_EQ(bot.evaluate_pattern(board, Position(0, 2), Cell::X), 10000 + 6 - 1);
+    
+}
+
+TEST(TestBot, evaluate_pattern_3){
+
+    Board board(position_hash, 9);
+    Bot bot(Cell::X);
+
+    board.make_move(Position(0, 0), Cell::X);
+    board.make_move(Position(0, 1), Cell::X);
+    board.make_move(Position(1, 1), Cell::X);
+
+    EXPECT_EQ(bot.evaluate_pattern(board, Position(1, 0), Cell::X), 3 * 100 + 2);
+    
+}
+
+TEST(TestBot, evaluate_pattern_4){
+
+    Board board(position_hash, 9);
+    Bot bot(Cell::X);
+
+    board.make_move(Position(0, 0), Cell::X);
+    board.make_move(Position(0, 1), Cell::X);
+    board.make_move(Position(1, 1), Cell::X);
+
+    board.make_move(Position(0, -1), Cell::O);
+    board.make_move(Position(-1, 0), Cell::O);
+    board.make_move(Position(-1, 2), Cell::O);
+    board.make_move(Position(1, 2), Cell::O);
+    board.make_move(Position(2, 1), Cell::O);
+    board.make_move(Position(2, 0), Cell::O);
+    board.make_move(Position(2, -1), Cell::O);
+    board.make_move(Position(1, -1), Cell::O);
+
+    EXPECT_EQ(bot.evaluate_pattern(board, Position(1, 0), Cell::X), 0);
+    
 }

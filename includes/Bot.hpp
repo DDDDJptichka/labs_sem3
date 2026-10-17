@@ -151,4 +151,34 @@ class Bot{
 
         }
 
+        long long int evaluate(Board& board){
+
+            Cell enemy;
+            
+            if (bot_cell == Cell::X){
+
+                enemy = Cell::O;
+
+            }
+            else{
+
+                enemy = Cell::X;
+
+            }
+
+            ListSequence<Position> poss_moves = board.get_possible_moves();
+            size_t count = poss_moves.get_length();
+            long long int res = 0; 
+
+            for (size_t i = 0; i < count; ++i){
+
+                Position pos = poss_moves[i];
+                res = res + evaluate_pattern(board, pos, bot_cell) - evaluate_pattern(board, pos, enemy);
+
+            }
+
+            return res;
+
+        }
+
 };

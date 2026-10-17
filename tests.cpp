@@ -1071,3 +1071,60 @@ TEST(TestBot, evaluate_move_4){
     EXPECT_EQ(bot.evaluate_move(board, Position(1, 0), Cell::X), 10030);
     
 }
+
+TEST(TestBot, evaluate_1){
+
+    Board board(position_hash, 9);
+    Bot bot(Cell::X);
+
+    EXPECT_EQ(bot.evaluate(board), 0);
+    
+}
+
+TEST(TestBot, evaluate_2){
+
+    Board board(position_hash, 9);
+    Bot bot(Cell::X);
+
+    board.make_move(Position(0, 0), Cell::X);
+    board.make_move(Position(0, 1), Cell::X);
+    board.make_move(Position(1, 1), Cell::O);
+
+    EXPECT_EQ(bot.evaluate(board), 20394);
+    
+}
+
+TEST(TestBot, evaluate_3){
+
+    Board board(position_hash, 9);
+    Bot bot(Cell::X);
+
+    board.make_move(Position(0, 0), Cell::X);
+    board.make_move(Position(0, 1), Cell::X);
+    board.make_move(Position(1, 1), Cell::X);
+
+    EXPECT_EQ(bot.evaluate(board), 61182);
+    
+}
+
+TEST(TestBot, evaluate_4){
+
+    Board board(position_hash, 9);
+    Bot bot(Cell::X);
+
+    board.make_move(Position(0, 0), Cell::X);
+    board.make_move(Position(0, 1), Cell::X);
+    board.make_move(Position(1, 1), Cell::X);
+
+    board.make_move(Position(0, -1), Cell::O);
+    board.make_move(Position(-1, 0), Cell::O);
+    board.make_move(Position(-1, 2), Cell::O);
+    board.make_move(Position(1, 2), Cell::O);
+    board.make_move(Position(2, 1), Cell::O);
+    board.make_move(Position(2, 0), Cell::O);
+    board.make_move(Position(2, -1), Cell::O);
+    board.make_move(Position(1, -1), Cell::O);
+
+    EXPECT_EQ(bot.evaluate(board), -4069374);
+    
+}

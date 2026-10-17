@@ -5,6 +5,10 @@
 #include "Position.hpp"
 #include "Cell.hpp"
 
+#define INF 1000000000000000
+#define WIN 1000000000000001
+#define LOSE -1000000000000001
+
 class Bot{
 
     private:
@@ -134,18 +138,7 @@ class Bot{
 
         int evaluate_move(Board& board, Position pos, Cell cell){
 
-            Cell enemy;
-
-            if (cell == Cell::X){
-
-                enemy = Cell::O;
-
-            }
-            else{
-
-                enemy = Cell::X;
-
-            }
+            Cell enemy = !cell;
 
             return evaluate_pattern(board, pos, cell) + evaluate_pattern(board, pos, enemy);
 
@@ -153,19 +146,8 @@ class Bot{
 
         long long int evaluate(Board& board){
 
-            Cell enemy;
+            Cell enemy = !bot_cell;
             
-            if (bot_cell == Cell::X){
-
-                enemy = Cell::O;
-
-            }
-            else{
-
-                enemy = Cell::X;
-
-            }
-
             ListSequence<Position> poss_moves = board.get_possible_moves();
             size_t count = poss_moves.get_length();
             long long int res = 0; 
@@ -180,5 +162,63 @@ class Bot{
             return res;
 
         }
+
+        long long int minimax(Board& board, int depth, long long int a, long long int b, bool maxi){
+
+            if (depth == 0){
+
+                return evaluate(board);
+
+            }
+
+            Cell curr = maxi ? bot_cell : !bot_cell;
+            ListSequence<Position> poss_moves = board.get_possible_moves();
+            size_t count = poss_moves.get_length();
+            long long int best = maxi ? -INF : INF;
+
+            for (size_t i = 0; i < count; ++i){
+
+                Position pos = poss_moves[i];
+                board.make_move(pos, curr);
+                long long int check_sum = 0;
+
+                if (board.check_win(pos, curr)){
+
+                    check_sum = maxi ? WIN : LOSE;
+
+                }
+                else{
+
+                    check_sum = minimax(board, depth - 1, a, b, false);
+
+                }
+
+                board.remove_move(pos);
+
+                if (maxi){
+
+                    best = std::max(best, check_sum);
+                    a = std::max(a, best);
+
+                }
+                else{
+
+                    best = std::min(best, check_sum);
+                    b = std::min(b, best);
+
+                }
+
+                if (b <= a){
+
+                    break;
+
+                }
+
+            }
+
+            return best;
+
+        }
+
 
 };

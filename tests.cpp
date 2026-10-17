@@ -8,6 +8,10 @@
 #include "includes/Board.hpp"
 #include "includes/Bot.hpp"
 
+#define INF 1000000000000000
+#define WIN 1000000000000001
+#define LOSE -1000000000000001
+
 TEST(LinkedList, CreateEmpty){
 
     LinkedList<int> list;
@@ -1127,4 +1131,96 @@ TEST(TestBot, evaluate_4){
 
     EXPECT_EQ(bot.evaluate(board), -4069374);
     
+}
+
+
+TEST(TestBot, minimax_1){
+
+    Board board(position_hash, 9);
+    Bot bot(Cell::X);
+
+    EXPECT_EQ(bot.minimax(board, 0, -INF, INF, true), 0);
+    
+}
+
+TEST(TestBot, minimax_2){
+
+    Board board(position_hash, 9);
+    Bot bot(Cell::X);
+
+    board.make_move(Position(0, 0), Cell::X);
+    board.make_move(Position(0, 1), Cell::X);
+    board.make_move(Position(1, 1), Cell::O);
+
+    ListSequence<Position> moves = board.get_possible_moves();
+
+    long long int expected = -INF;
+
+    for (size_t i = 0; i < moves.get_length(); ++i){
+
+        Position pos = moves[i];
+
+        board.make_move(pos, Cell::X);
+        expected = std::max(expected, bot.evaluate(board));
+        board.remove_move(pos);
+
+    }
+
+    EXPECT_EQ(bot.minimax(board, 1, -INF, INF, true), expected);
+
+}
+
+TEST(TestBot, minimax_3){
+
+    Board board(position_hash, 9);
+    Bot bot(Cell::X);
+
+    board.make_move(Position(0, 0), Cell::X);
+    board.make_move(Position(0, 1), Cell::X);
+    board.make_move(Position(1, 1), Cell::O);
+
+    ListSequence<Position> moves = board.get_possible_moves();
+
+    long long int expected = INF;
+
+    for (size_t i = 0; i < moves.get_length(); ++i){
+
+        Position pos = moves[i];
+
+        board.make_move(pos, Cell::O);
+        expected = std::min(expected, bot.evaluate(board));
+        board.remove_move(pos);
+
+    }
+
+    EXPECT_EQ(bot.minimax(board, 1, -INF, INF, false), expected);
+
+}
+
+TEST(TestBot, minimax_4){
+
+    Board board(position_hash, 9);
+    Bot bot(Cell::X);
+
+    board.make_move(Position(0, 0), Cell::X);
+    board.make_move(Position(1, 0), Cell::X);
+    board.make_move(Position(2, 0), Cell::X);
+    board.make_move(Position(3, 0), Cell::X);
+
+    EXPECT_EQ(bot.minimax(board, 1, -INF, INF, true), WIN);
+
+}
+
+TEST(TestBot, minimax_5){
+
+    Board board(position_hash, 9);
+    Bot bot(Cell::X);
+
+    board.make_move(Position(0, 0), Cell::O);
+    board.make_move(Position(1, 0), Cell::O);
+    board.make_move(Position(2, 0), Cell::O);
+    board.make_move(Position(3, 0), Cell::O);
+
+    EXPECT_EQ(bot.minimax(board, 1, -INF, INF, false), LOSE);
+
 }

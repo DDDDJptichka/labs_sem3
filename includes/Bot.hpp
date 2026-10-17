@@ -132,4 +132,23 @@ class Bot{
 
         }
 
+        int evaluate_move(Board& board, Position pos, Cell cell){
+
+            Cell enemy;
+
+            if (cell == Cell::X){
+
+                enemy = Cell::O;
+
+            }
+            else{
+
+                enemy = Cell::X;
+
+            }
+
+            return evaluate_pattern(board, pos, cell) + evaluate_pattern(board, pos, enemy);
+
+        }
+
 };

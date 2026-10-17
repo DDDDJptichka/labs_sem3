@@ -189,7 +189,7 @@ class Bot{
                 }
                 else{
 
-                    check_sum = minimax(board, depth - 1, a, b, false);
+                    check_sum = minimax(board, depth - 1, a, b, !maxi);
 
                 }
 
@@ -220,5 +220,49 @@ class Bot{
 
         }
 
+        Position find_best_move(Board& board){
+
+            ListSequence<Position> poss_moves = board.get_possible_moves();
+            size_t len = poss_moves.get_length();
+
+            Position best_pos;
+            long long int a = -INF;
+            long long int best = -INF;
+
+            size_t depth = 4;
+
+            for (size_t i = 0; i < len; ++i){
+
+                Position curr = poss_moves[i];
+                board.make_move(curr, bot_cell);
+                long long int check_sum = 0;
+
+                if (board.check_win(curr, bot_cell)){
+
+                    check_sum = INF;
+
+                }
+                else{
+
+                    check_sum = minimax(board, depth - 1, a, INF, false);
+
+                }
+
+                board.remove_move(curr);
+
+                if (check_sum > best){
+
+                    best_pos = curr;
+                    best = check_sum;
+
+                }
+
+                a = std::max(a, best);
+
+            }
+
+            return best_pos;
+
+        }
 
 };

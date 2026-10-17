@@ -1224,3 +1224,61 @@ TEST(TestBot, minimax_5){
     EXPECT_EQ(bot.minimax(board, 1, -INF, INF, false), LOSE);
 
 }
+
+TEST(TestBot, find_best_move_1){
+
+    Board board(position_hash, 9);
+    Bot bot(Cell::X);
+
+    EXPECT_EQ(bot.find_best_move(board), Position(0, 0));
+
+}
+
+TEST(TestBot, find_best_move_2){
+
+    Board board(position_hash, 9);
+    Bot bot(Cell::X);
+
+    board.make_move(Position(0, 0), Cell::X);
+    board.make_move(Position(1, 0), Cell::X);
+    board.make_move(Position(2, 0), Cell::X);
+    board.make_move(Position(3, 0), Cell::X);
+
+    board.make_move(Position(-1, 0), Cell::O);
+
+    EXPECT_EQ(bot.find_best_move(board), Position(4, 0));
+
+}
+
+TEST(TestBot, find_best_move_3){
+
+    Board board(position_hash, 9);
+    Bot bot(Cell::X);
+
+    board.make_move(Position(0, 0), Cell::O);
+    board.make_move(Position(1, 0), Cell::O);
+    board.make_move(Position(2, 0), Cell::O);
+    board.make_move(Position(3, 0), Cell::O);
+    board.make_move(Position(10, 10), Cell::O);
+    board.make_move(Position(11, 10), Cell::O);
+    board.make_move(Position(-1, 0), Cell::X);
+
+    EXPECT_EQ(bot.find_best_move(board), Position(4, 0));
+
+}
+
+TEST(TestBot, find_best_move_4){
+
+    Board board(position_hash, 9);
+    Bot bot(Cell::X);
+
+    board.make_move(Position(0, 0), Cell::X);
+    board.make_move(Position(1, 1), Cell::X);
+    board.make_move(Position(2, 2), Cell::X);
+    board.make_move(Position(3, 3), Cell::X);
+
+    board.make_move(Position(-1, -1), Cell::O);
+
+    EXPECT_EQ(bot.find_best_move(board), Position(4, 4));
+
+}

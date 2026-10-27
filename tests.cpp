@@ -1282,3 +1282,28 @@ TEST(TestBot, find_best_move_4){
     EXPECT_EQ(bot.find_best_move(board), Position(4, 4));
 
 }
+
+TEST(TestTable, get_occupied_pos_1){
+
+    Board board(position_hash, 9);
+    board.make_move(Position(3, 3), Cell::X);
+
+    ListSequence<Position> list = board.get_occupied_pos();
+
+    EXPECT_EQ(list[0], Position(3, 3));
+
+}
+
+TEST(TestTable, get_occupied_pos_2){
+
+    Board board(position_hash, 9);
+
+    board.make_move(Position(1, 1), Cell::O);
+    board.make_move(Position(3, 3), Cell::X);
+
+    ListSequence<Position> list = board.get_occupied_pos();
+
+    EXPECT_EQ(list[0], Position(3, 3));
+    EXPECT_EQ(list[1], Position(1, 1));
+
+}

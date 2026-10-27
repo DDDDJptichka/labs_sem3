@@ -200,4 +200,10 @@ class Board{
 
         }
 
+        ListSequence<Position> get_occupied_pos() const{
+
+            return board.get_keys();
+
+        }
+
 };

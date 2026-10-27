@@ -2,7 +2,7 @@
 
 enum class Cell{Empty, X, O};
 
-Cell operator!(Cell cell){
+inline Cell operator!(Cell cell){
 
     if (cell == Cell::X){
 

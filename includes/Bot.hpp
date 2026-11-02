@@ -235,6 +235,15 @@ class Bot{
 
                 Position curr = poss_moves[i];
                 board.make_move(curr, bot_cell);
+
+                if (board.check_win(curr, bot_cell)){
+
+                    board.remove_move(curr);
+
+                    return curr;
+
+                }
+
                 long long int check_sum = 0;
 
                 if (board.check_win(curr, bot_cell)){

@@ -1139,7 +1139,7 @@ TEST(TestBot, minimax_1){
     Board board(position_hash, 9);
     Bot bot(Cell::X);
 
-    EXPECT_EQ(bot.minimax(board, 0, -INF, INF, true), 0);
+    EXPECT_EQ(bot.minimax(board, 0, -INF, INF, true, true), 0);
     
 }
 
@@ -1166,7 +1166,7 @@ TEST(TestBot, minimax_2){
 
     }
 
-    EXPECT_EQ(bot.minimax(board, 1, -INF, INF, true), expected);
+    EXPECT_EQ(bot.minimax(board, 1, -INF, INF, true, true), expected);
 
 }
 
@@ -1193,7 +1193,7 @@ TEST(TestBot, minimax_3){
 
     }
 
-    EXPECT_EQ(bot.minimax(board, 1, -INF, INF, false), expected);
+    EXPECT_EQ(bot.minimax(board, 1, -INF, INF, false, true), expected);
 
 }
 
@@ -1207,7 +1207,7 @@ TEST(TestBot, minimax_4){
     board.make_move(Position(2, 0), Cell::X);
     board.make_move(Position(3, 0), Cell::X);
 
-    EXPECT_EQ(bot.minimax(board, 1, -INF, INF, true), WIN);
+    EXPECT_EQ(bot.minimax(board, 1, -INF, INF, true, true), WIN);
 
 }
 
@@ -1221,7 +1221,7 @@ TEST(TestBot, minimax_5){
     board.make_move(Position(2, 0), Cell::O);
     board.make_move(Position(3, 0), Cell::O);
 
-    EXPECT_EQ(bot.minimax(board, 1, -INF, INF, false), LOSE);
+    EXPECT_EQ(bot.minimax(board, 1, -INF, INF, false, true), LOSE);
 
 }
 

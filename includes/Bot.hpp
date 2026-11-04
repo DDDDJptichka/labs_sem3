@@ -164,7 +164,7 @@ class Bot{
 
         }
 
-        long long int minimax(Board& board, int depth, long long int a, long long int b, bool maxi){
+        long long int minimax(Board& board, int depth, long long int a, long long int b, bool maxi, bool use_a_b){
 
             if (depth == 0){
 
@@ -190,7 +190,7 @@ class Bot{
                 }
                 else{
 
-                    check_sum = minimax(board, depth - 1, a, b, !maxi);
+                    check_sum = minimax(board, depth - 1, a, b, !maxi, use_a_b);
 
                 }
 
@@ -209,7 +209,7 @@ class Bot{
 
                 }
 
-                if (b <= a){
+                if (use_a_b && (b <= a)){
 
                     break;
 
@@ -221,7 +221,7 @@ class Bot{
 
         }
 
-        Position find_best_move(Board& board){
+        Position find_best_move(Board& board, bool use_a_b = true){
 
             ListSequence<Position> poss_moves = board.get_possible_moves();
             size_t len = poss_moves.get_length();
@@ -252,7 +252,7 @@ class Bot{
                 }
                 else{
 
-                    check_sum = minimax(board, depth - 1, a, INF, false);
+                    check_sum = minimax(board, depth - 1, a, INF, false, use_a_b);
 
                 }
 

@@ -5,6 +5,8 @@
 #include <QTimer>
 
 #include <cmath>
+#include <chrono>
+#include <iostream>
 
 size_t position_hash(Position pos){
 
@@ -145,7 +147,19 @@ void GameWindow::make_bot_move(){
 
     }
 
+    auto start1 = std::chrono::steady_clock::now();
     Position pos = bot.find_best_move(board);
+    auto end1 = std::chrono::steady_clock::now();
+
+    auto start2 = std::chrono::steady_clock::now();
+    Position pos2 = bot.find_best_move(board, false);
+    auto end2 = std::chrono::steady_clock::now();
+
+    auto time1 = std::chrono::duration_cast<std::chrono::milliseconds>(end1 - start1);
+    auto time2 = std::chrono::duration_cast<std::chrono::milliseconds>(end2 - start2);
+
+    std::cout<<"Alpha-beta time: " << time1.count() << " ms\n" << "Simple minimax: " << time2.count() << "ms\n\n" << (pos == pos2);
+
     board.make_move(pos, Cell::O);
     update();
 

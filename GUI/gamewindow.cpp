@@ -26,13 +26,13 @@ void GameWindow::paintEvent(QPaintEvent* event){
     QPainter painter(this);
     painter.fillRect(rect(), QColor(30, 30, 40));
 
-    int origin_x = width() / 2 - cell_size / 2;
-    int origin_y = height() / 2 - cell_size / 2;
+    int origin_x = width() / 2 - cell_size / 2 + offset_x;
+    int origin_y = height() / 2 - cell_size / 2 + offset_y;
 
     painter.setPen(QPen(QColor(80, 80, 95), 1));
 
-    int start_x = origin_x % cell_size;
-    int start_y = origin_y % cell_size;
+    int start_x = ((origin_x % cell_size) + cell_size) % cell_size;
+    int start_y = ((origin_y % cell_size) + cell_size) % cell_size;
 
     for (int x = start_x; x <= width(); x += cell_size){
 
@@ -85,6 +85,15 @@ void GameWindow::paintEvent(QPaintEvent* event){
 
 void GameWindow::mousePressEvent(QMouseEvent* event){
 
+    if (event->button() == Qt::RightButton){
+
+        dragging = true;
+        last_mouse_pos = event->pos();
+
+        return;
+
+    }
+
     if (event->button() != Qt::LeftButton){
 
         return;
@@ -97,8 +106,8 @@ void GameWindow::mousePressEvent(QMouseEvent* event){
 
     }
 
-    int origin_x = width() / 2 - cell_size / 2;
-    int origin_y = height() / 2 - cell_size / 2;
+    int origin_x = width() / 2 - cell_size / 2 + offset_x;
+    int origin_y = height() / 2 - cell_size / 2 + offset_y;
     int x = std::floor((event->position().x() - origin_x) / cell_size);
     int y = std::floor((event->position().y() - origin_y) / cell_size);
 
@@ -151,5 +160,33 @@ void GameWindow::make_bot_move(){
 
     bot_turn = false;
     setWindowTitle("Five in Row - Your turn");
+
+}
+
+void GameWindow::mouseMoveEvent(QMouseEvent* event){
+
+    if (dragging == false){
+
+        return;
+
+    }
+
+    QPoint delta = event->pos() - last_mouse_pos;
+
+    offset_x += delta.x();
+    offset_y += delta.y();
+    last_mouse_pos = event->pos();
+
+    update();
+
+}
+
+void GameWindow::mouseReleaseEvent(QMouseEvent* event){
+
+    if (event->button() == Qt::RightButton){
+
+        dragging = false;
+
+    }
 
 }

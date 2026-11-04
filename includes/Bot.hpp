@@ -14,6 +14,7 @@ class Bot{
     private:
 
         Cell bot_cell;
+        size_t depth = 2;
 
     public:
 
@@ -228,8 +229,6 @@ class Bot{
             Position best_pos;
             long long int a = -INF;
             long long int best = -INF;
-
-            size_t depth = 3;
 
             for (size_t i = 0; i < len; ++i){
 

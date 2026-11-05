@@ -69,4 +69,50 @@ template <typename T> class Tree{
 
         }
 
+        bool find(const T& value) const{
+
+            if (root == nullptr){
+
+                return false;
+
+            }
+
+            Node* curr = root.get();
+
+            while (curr != nullptr){
+
+                if (value == curr->data){
+
+                    return true;
+
+                }
+                else if (value < curr->data){
+
+                    curr = curr->left.get();
+
+                }
+                else{
+
+                    curr = curr->right.get();
+
+                }
+
+            }
+
+            return false;
+
+        }
+
+        T get_root() const{
+
+            if (root == nullptr){
+
+                throw root_is_empty("Root is empty");
+
+            }
+
+            return root->data;
+
+        }
+
 };

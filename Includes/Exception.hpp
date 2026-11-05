@@ -20,3 +20,11 @@ class exception : public std::exception{
         }
 
 };
+
+class root_is_empty : public exception{
+
+    public:
+
+        explicit root_is_empty(const std::string &msg) : exception(msg){}
+
+};

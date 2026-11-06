@@ -342,3 +342,73 @@ TEST(TestTree, where_no_matches){
     EXPECT_THROW(res.get_root(), root_is_empty);
 
 }
+
+TEST(TestTree, reduce_sum){
+
+    Tree<int> tree;
+
+    tree.add(10);
+    tree.add(5);
+    tree.add(15);
+
+    int res = tree.reduce(0, [](int a, int b){return a + b;});
+
+    EXPECT_EQ(res, 30);
+
+}
+
+TEST(TestTree, reduce_mult){
+
+    Tree<int> tree;
+
+    tree.add(2);
+    tree.add(3);
+    tree.add(4);
+
+    int res = tree.reduce(1, [](int a, int b){return a * b;});
+
+    EXPECT_EQ(res, 24);
+
+}
+
+TEST(TestTree, reduce_empty){
+
+    Tree<int> tree;
+
+    int res = tree.reduce(1, [](int a, int b){return a + b;});
+
+    EXPECT_EQ(res, 1);
+
+}
+
+TEST(TestTree, reduce_2){
+
+    Tree<int> tree;
+
+    tree.add(5);
+    tree.add(3);
+    tree.add(7);
+
+    int res = tree.reduce(0, [](int a, int b){return a * 10 + b;});
+
+    EXPECT_EQ(res, 537);
+
+}
+
+TEST(TestTree, reduce_different_type){
+
+    Tree<int> tree;
+
+    tree.add(10);
+    tree.add(20);
+    tree.add(30);
+
+    std::string res = tree.reduce(std::string(""), [](const std::string& a, int b){
+
+        return a + std::to_string(b) + " ";
+
+    });
+
+    EXPECT_EQ(res, "10 20 30 ");
+
+}

@@ -237,4 +237,15 @@ template <typename T> class Tree{
 
         }
 
+        template <typename A, typename Func> A reduce(const A& start_value, Func f) const{
+
+            A res = start_value;
+
+            auto action = [&](const T& value){res = f(res, value);};
+            travel(root.get(), action);
+
+            return res;
+
+        }
+
 };

@@ -186,4 +186,35 @@ template <typename T> class Tree{
 
         }
 
+        template <typename Func> void travel(Node* start, Func& f) const{
+
+            if (start == nullptr){
+
+                return;
+
+            }
+
+            f(start->data);
+
+            travel(start->left.get(), f);
+            travel(start->right.get(), f);
+
+        }
+
+        template <typename Func> Tree<T> map(Func f) const{
+
+            Tree<T> res;
+
+            auto action = [&](const T& value){
+
+                res.add(f(value));
+
+            };
+
+            travel(root.get(), action);
+
+            return res;
+
+        }
+
 };

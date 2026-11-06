@@ -269,3 +269,29 @@ TEST(TestTree, string){
     EXPECT_FALSE(tree.find("apple"));
 
 }
+
+TEST(TestTree, map){
+
+    Tree<int> tree;
+
+    tree.add(10);
+    tree.add(5);
+    tree.add(15);
+
+    Tree<int> res = tree.map([](int x){return x + 2;});
+
+    EXPECT_TRUE(res.find(12));
+    EXPECT_TRUE(res.find(7));
+    EXPECT_TRUE(res.find(17));
+    EXPECT_EQ(res.get_root(), 12);
+
+}
+
+TEST(TestTree, map_nullptr){
+
+    Tree<int> tree;
+    Tree<int> res = tree.map([](int x){return x + 10;});
+
+    EXPECT_THROW(res.get_root(), root_is_empty);
+
+}   

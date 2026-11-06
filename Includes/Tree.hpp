@@ -270,4 +270,26 @@ template <typename T> class Tree{
 
         }
 
+        static Tree<T> from_string(const std::string& str){
+
+            Tree<T> res;
+            std::istringstream stream(str);
+            T value;
+
+            while (stream >> value){
+
+                res.add(value);
+
+            }
+
+            if (stream.eof() == false){
+
+                throw invalid_str("Invalid tree string");
+
+            }
+
+            return res;
+
+        }
+
 };

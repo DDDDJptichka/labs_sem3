@@ -28,3 +28,11 @@ class root_is_empty : public exception{
         explicit root_is_empty(const std::string &msg) : exception(msg){}
 
 };
+
+class invalid_str : public exception{
+
+    public:
+
+        explicit invalid_str(const std::string &msg) : exception(msg){}
+
+};

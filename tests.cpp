@@ -599,3 +599,50 @@ TEST(TestTree, to_string_after_remove){
     EXPECT_TRUE(tree.find(7));
 
 }
+
+TEST(TestTree, from_string){
+
+    Tree<int> tree = Tree<int>::from_string("10 5 3 7 15 20 ");
+
+    EXPECT_EQ(tree.get_root(), 10);
+    EXPECT_TRUE(tree.find(5));
+    EXPECT_TRUE(tree.find(3));
+    EXPECT_TRUE(tree.find(7));
+    EXPECT_TRUE(tree.find(15));
+    EXPECT_TRUE(tree.find(20));
+
+    EXPECT_EQ(tree.to_string(), "10 5 3 7 15 20 ");
+
+}
+
+TEST(TestTree, from_string_empty){
+
+    Tree<int> tree = Tree<int>::from_string("");
+
+    EXPECT_THROW(tree.get_root(), root_is_empty);
+
+}
+
+TEST(TestTree, from_string_invalid){
+
+    EXPECT_THROW(Tree<int>::from_string("10 5 abc 15"), invalid_str);
+
+}
+
+TEST(TestTree, to_str_from_str_to_str_eq){
+
+    Tree<int> tree;
+
+    tree.add(10);
+    tree.add(5);
+    tree.add(15);
+    tree.add(3);
+    tree.add(7);
+
+    std::string str = tree.to_string();
+
+    Tree<int> res = Tree<int>::from_string(str);
+
+    EXPECT_EQ(res.to_string(), tree.to_string());
+
+}

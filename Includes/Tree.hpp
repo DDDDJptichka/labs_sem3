@@ -217,4 +217,24 @@ template <typename T> class Tree{
 
         }
 
+        template <typename Func> Tree<T> where(Func f) const{
+
+            Tree<T> res;
+
+            auto filter = [&](const T& value){
+
+                if (f(value)){
+
+                    res.add(value);
+
+                }
+
+            };
+
+            travel(root.get(), filter);
+
+            return res;
+
+        }
+
 };

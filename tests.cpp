@@ -287,11 +287,58 @@ TEST(TestTree, map){
 
 }
 
-TEST(TestTree, map_nullptr){
+TEST(TestTree, map_empty){
 
     Tree<int> tree;
     Tree<int> res = tree.map([](int x){return x + 10;});
 
     EXPECT_THROW(res.get_root(), root_is_empty);
 
-}   
+}
+
+TEST(TestTree, where){
+
+    Tree<int> tree;
+
+    tree.add(10);
+    tree.add(5);
+    tree.add(15);
+    tree.add(3);
+    tree.add(20);
+
+    Tree<int> res = tree.where([](int x){return x > 10;});
+
+    EXPECT_TRUE(res.find(15));
+    EXPECT_TRUE(res.find(20));
+
+    EXPECT_FALSE(res.find(10));
+    EXPECT_FALSE(res.find(5));
+    EXPECT_FALSE(res.find(3));
+
+    EXPECT_EQ(tree.get_root(), 10);
+    EXPECT_EQ(res.get_root(), 15);
+
+}
+
+TEST(TestTree, where_empty){
+
+    Tree<int> tree;
+    Tree<int> res = tree.where([](int x){return x > 10;});
+
+    EXPECT_THROW(res.get_root(), root_is_empty);
+
+}
+
+TEST(TestTree, where_no_matches){
+
+    Tree<int> tree;
+
+    tree.add(10);
+    tree.add(5);
+    tree.add(15);
+
+    Tree<int> res = tree.where([](int x){return x > 100;});
+
+    EXPECT_THROW(res.get_root(), root_is_empty);
+
+}

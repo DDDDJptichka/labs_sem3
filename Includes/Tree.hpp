@@ -248,4 +248,16 @@ template <typename T> class Tree{
 
         }
 
+        Tree<T> get_subtree(const T& root_value){
+
+            Tree<T> subtree;
+
+            auto action = [&](const T& value){subtree.add(value);};
+
+            travel(find_internal(root_value), action);
+
+            return subtree;
+
+        }
+
 };

@@ -412,3 +412,83 @@ TEST(TestTree, reduce_different_type){
     EXPECT_EQ(res, "10 20 30 ");
 
 }
+
+TEST(TestTree, get_subtree){
+
+    Tree<int> tree;
+
+    tree.add(10);
+    tree.add(5);
+    tree.add(15);
+    tree.add(3);
+    tree.add(20);
+
+    Tree<int> res = tree.get_subtree(5);
+
+    EXPECT_TRUE(res.find(5));
+    EXPECT_TRUE(res.find(3));
+    EXPECT_EQ(res.get_root(), 5);
+
+    EXPECT_EQ(tree.get_root(), 10);
+
+}
+
+TEST(TestTree, get_subtree_1){
+
+    Tree<int> tree;
+
+    tree.add(10);
+    tree.add(5);
+    tree.add(15);
+    tree.add(3);
+    tree.add(20);
+
+    Tree<int> res = tree.get_subtree(3);
+
+    EXPECT_TRUE(res.find(3));
+    EXPECT_EQ(res.get_root(), 3);
+    
+    EXPECT_EQ(tree.get_root(), 10);
+
+}
+
+TEST(TestTree, get_subtree_empty){
+
+    Tree<int> tree;
+
+    tree.add(10);
+    tree.add(5);
+    tree.add(15);
+    tree.add(3);
+    tree.add(20);
+
+    Tree<int> res = tree.get_subtree(300);
+
+    EXPECT_THROW(res.get_root(), root_is_empty);
+    
+    EXPECT_EQ(tree.get_root(), 10);
+
+}
+
+TEST(TestTree, get_subtree_tree){
+
+    Tree<int> tree;
+
+    tree.add(10);
+    tree.add(5);
+    tree.add(15);
+    tree.add(3);
+    tree.add(20);
+
+    Tree<int> res = tree.get_subtree(10);
+
+    EXPECT_EQ(res.get_root(), 10);
+    EXPECT_TRUE(res.find(10));
+    EXPECT_TRUE(res.find(5));
+    EXPECT_TRUE(res.find(15));
+    EXPECT_TRUE(res.find(3));
+    EXPECT_TRUE(res.find(20));
+    
+    EXPECT_EQ(tree.get_root(), 10);
+
+}

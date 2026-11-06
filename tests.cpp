@@ -492,3 +492,110 @@ TEST(TestTree, get_subtree_tree){
     EXPECT_EQ(tree.get_root(), 10);
 
 }
+
+TEST(TestTree, to_string_empty){
+
+    Tree<int> tree;
+
+    EXPECT_EQ(tree.to_string(), "");
+
+}
+
+TEST(TestTree, to_string_single){
+
+    Tree<int> tree(10);
+
+    EXPECT_EQ(tree.to_string(), "10 ");
+
+}
+
+TEST(TestTree, to_string){
+
+    Tree<int> tree;
+
+    tree.add(10);
+    tree.add(5);
+    tree.add(15);
+    tree.add(3);
+    tree.add(7);
+    tree.add(20);
+
+    EXPECT_EQ(tree.to_string(), "10 5 3 7 15 20 ");
+
+}
+
+TEST(TestTree, to_string_no_change){
+
+    Tree<int> tree;
+
+    tree.add(10);
+    tree.add(5);
+    tree.add(15);
+
+    std::string res = tree.to_string();
+
+    EXPECT_EQ(res, "10 5 15 ");
+
+    EXPECT_EQ(tree.get_root(), 10);
+    EXPECT_TRUE(tree.find(5));
+    EXPECT_TRUE(tree.find(15));
+
+}
+
+TEST(TestTree, to_string_duplicates){
+
+    Tree<int> tree;
+
+    tree.add(10);
+    tree.add(5);
+    tree.add(5);
+    tree.add(15);
+    tree.add(10);
+
+    EXPECT_EQ(tree.to_string(), "10 5 5 10 15 ");
+
+}
+
+TEST(TestTree, to_string_negative){
+
+    Tree<int> tree;
+
+    tree.add(0);
+    tree.add(-10);
+    tree.add(10);
+    tree.add(-20);
+    tree.add(-5);
+
+    EXPECT_EQ(tree.to_string(), "0 -10 -20 -5 10 ");
+
+}
+
+TEST(TestTree, to_string_strings){
+
+    Tree<std::string> tree;
+
+    tree.add("banana");
+    tree.add("apple");
+    tree.add("cherry");
+
+    EXPECT_EQ(tree.to_string(), "banana apple cherry ");
+
+}
+
+TEST(TestTree, to_string_after_remove){
+
+    Tree<int> tree;
+
+    tree.add(10);
+    tree.add(5);
+    tree.add(15);
+    tree.add(3);
+    tree.add(7);
+
+    EXPECT_TRUE(tree.remove(5));
+
+    EXPECT_EQ(tree.to_string(), "10 3 7 15 ");
+    EXPECT_TRUE(tree.find(3));
+    EXPECT_TRUE(tree.find(7));
+
+}

@@ -248,15 +248,25 @@ template <typename T> class Tree{
 
         }
 
-        Tree<T> get_subtree(const T& root_value){
+        Tree<T> get_subtree(const T& root_value) const{
 
             Tree<T> subtree;
 
             auto action = [&](const T& value){subtree.add(value);};
-
             travel(find_internal(root_value), action);
 
             return subtree;
+
+        }
+
+        std::string to_string() const{
+
+            std::ostringstream str;
+
+            auto action = [&](const T& value){str << value << " ";};
+            travel(root.get(), action);
+
+            return str.str();
 
         }
 

@@ -646,3 +646,84 @@ TEST(TestTree, to_str_from_str_to_str_eq){
     EXPECT_EQ(res.to_string(), tree.to_string());
 
 }
+
+TEST(TestTree, is_subtree_empty_tree_1){
+
+    Tree<int> tree;
+    Tree<int> subtree;
+
+    EXPECT_TRUE(tree.is_subtree(subtree));
+
+}
+
+TEST(TestTree, is_subtree_empty_tree_2){
+
+    Tree<int> tree;
+    Tree<int> subtree(10);
+
+    EXPECT_FALSE(tree.is_subtree(subtree));
+
+}
+
+TEST(TestTree, is_subtree_empty_tree_3){
+
+    Tree<int> tree(10);
+    Tree<int> subtree;
+
+    EXPECT_TRUE(tree.is_subtree(subtree));
+
+}
+
+TEST(TestTree, is_subtree_tree){
+
+    Tree<int> tree;
+
+    tree.add(10);
+    tree.add(5);
+    tree.add(15);
+    tree.add(3);
+    tree.add(7);
+
+    EXPECT_TRUE(tree.is_subtree(tree));
+
+}
+
+TEST(TestTree, is_subtree_1){
+
+    Tree<int> tree;
+    Tree<int> subtree;
+
+    tree.add(10);
+    tree.add(5);
+    tree.add(15);
+    tree.add(3);
+    tree.add(7);
+
+    subtree.add(5);
+    subtree.add(3);
+    subtree.add(7);
+
+    EXPECT_TRUE(tree.is_subtree(subtree));
+
+}
+
+TEST(TestTree, is_subtree_same){
+
+    Tree<int> tree;
+    Tree<int> subtree;
+
+    tree.add(10);
+    tree.add(5);
+    tree.add(15);
+    tree.add(3);
+    tree.add(7);
+
+    subtree.add(10);
+    subtree.add(5);
+    subtree.add(15);
+    subtree.add(3);
+    subtree.add(7);
+
+    EXPECT_TRUE(tree.is_subtree(subtree));
+
+}

@@ -50,11 +50,47 @@ template <typename T> class Tree{
 
         }
 
+        bool is_same_tree(const Node* a, const Node* b) const{
+
+            if ((a == nullptr) || (b == nullptr)){
+
+                return a == b;
+
+            }
+
+            if (a->data != b->data){
+
+                return false;
+
+            }
+
+            return is_same_tree(a->left.get(), b->left.get()) && is_same_tree(a->right.get(), b->right.get());
+
+        }
+
+        bool is_subtree_internal(const Node* start, const Node* node) const{
+
+            if (start == nullptr){
+
+                return false;
+
+            }
+
+            if (is_same_tree(start, node)){
+
+                return true;
+            
+            }
+
+            return is_subtree_internal(start->left.get(), node) && is_subtree_internal(start->right.get(), node);
+
+        }
+
     public:
 
         Tree(){}
 
-        Tree(const T& value) : root(std::make_unique<Node>(value)){}
+        Tree(const T& root_value) : root(std::make_unique<Node>(root_value)){}
 
         void add(const T& value){
 
@@ -289,6 +325,41 @@ template <typename T> class Tree{
             }
 
             return res;
+
+        }
+
+        bool is_subtree(const Tree<T>& subtree) const{
+
+            if (subtree.root == nullptr){
+
+                return true;
+
+            }
+
+            Node* start = root.get();
+            T sub_data = subtree.get_root();
+
+            while (start != nullptr){
+
+                if (sub_data == start->data){
+
+                    break;
+
+                }
+                else if (sub_data < start->data){
+
+                    start = start->left.get();
+
+                }
+                else{
+
+                    start = start->right.get();
+
+                }
+
+            }
+
+            return is_subtree_internal(start, subtree.root.get());
 
         }
 

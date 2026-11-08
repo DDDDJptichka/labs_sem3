@@ -727,3 +727,77 @@ TEST(TestTree, is_subtree_same){
     EXPECT_TRUE(tree.is_subtree(subtree));
 
 }
+
+TEST(TestTree, is_subtree_false){
+
+    Tree<int> tree;
+    Tree<int> subtree;
+
+    tree.add(10);
+    tree.add(5);
+    tree.add(15);
+    tree.add(3);
+    tree.add(7);
+
+    subtree.add(10);
+    subtree.add(50);
+    subtree.add(150);
+    subtree.add(3);
+    subtree.add(7);
+
+    EXPECT_FALSE(tree.is_subtree(subtree));
+
+}
+
+TEST(TestTree, is_subtree_single){
+
+    Tree<int> tree;
+    Tree<int> subtree;
+
+    tree.add(10);
+    tree.add(5);
+    tree.add(15);
+    tree.add(3);
+    tree.add(7);
+
+    subtree.add(7);
+
+    EXPECT_TRUE(tree.is_subtree(subtree));
+
+}
+
+TEST(TestTree, is_subtree_not_leaf){
+
+    Tree<int> tree;
+    Tree<int> subtree;
+
+    tree.add(10);
+    tree.add(5);
+    tree.add(15);
+    tree.add(3);
+    tree.add(7);
+
+    subtree.add(5);
+
+    EXPECT_FALSE(tree.is_subtree(subtree));
+
+}
+
+TEST(TestTree, is_subtree_3){
+
+    Tree<int> tree;
+    Tree<int> subtree;
+
+    tree.add(10);
+    tree.add(5);
+    tree.add(5);
+    tree.add(15);
+    tree.add(3);
+    tree.add(7);
+
+    subtree.add(5);
+    subtree.add(3);
+
+    EXPECT_TRUE(tree.is_subtree(subtree));
+
+}

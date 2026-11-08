@@ -82,7 +82,7 @@ template <typename T> class Tree{
             
             }
 
-            return is_subtree_internal(start->left.get(), node) && is_subtree_internal(start->right.get(), node);
+            return is_subtree_internal(start->left.get(), node) || is_subtree_internal(start->right.get(), node);
 
         }
 

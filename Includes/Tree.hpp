@@ -58,7 +58,7 @@ template <typename T> class Tree{
 
             }
 
-            if (a->data != b->data){
+            if ((a->data != b->data) || (a->count != b->count)){
 
                 return false;
 
@@ -105,7 +105,14 @@ template <typename T> class Tree{
 
             while (true){
 
-                if (value <= curr->data){
+                if (value == curr->data){
+
+                    ++curr->count;
+                    
+                    return;
+
+                }
+                else if (value < curr->data){
 
                     if (curr->left == nullptr){
 
@@ -149,6 +156,14 @@ template <typename T> class Tree{
             if (curr == nullptr){
 
                 return false;
+
+            }
+
+            if (curr->count > 1){
+
+                --curr->count;
+
+                return true;
 
             }
 
@@ -230,7 +245,11 @@ template <typename T> class Tree{
 
             }
 
-            f(start->data);
+            for (size_t i = 0; i < start->count; ++i){
+
+                f(start->data);
+
+            }
 
             travel(start->left.get(), f);
             travel(start->right.get(), f);
@@ -362,5 +381,7 @@ template <typename T> class Tree{
             return is_subtree_internal(start, subtree.root.get());
 
         }
+
+
 
 };

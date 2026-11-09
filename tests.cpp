@@ -552,7 +552,7 @@ TEST(TestTree, to_string_duplicates){
     tree.add(15);
     tree.add(10);
 
-    EXPECT_EQ(tree.to_string(), "10 5 5 10 15 ");
+    EXPECT_EQ(tree.to_string(), "10 10 5 5 15 ");
 
 }
 
@@ -796,8 +796,30 @@ TEST(TestTree, is_subtree_3){
     tree.add(7);
 
     subtree.add(5);
+    subtree.add(5);
     subtree.add(3);
+    subtree.add(7);
 
     EXPECT_TRUE(tree.is_subtree(subtree));
+
+}
+
+TEST(TestTree, is_subtree_4){
+
+    Tree<int> tree;
+    Tree<int> subtree;
+
+    tree.add(10);
+    tree.add(5);
+    tree.add(5);
+    tree.add(15);
+    tree.add(3);
+    tree.add(7);
+
+    subtree.add(5);
+    subtree.add(3);
+    subtree.add(7);
+
+    EXPECT_FALSE(tree.is_subtree(subtree));
 
 }

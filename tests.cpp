@@ -823,3 +823,138 @@ TEST(TestTree, is_subtree_4){
     EXPECT_FALSE(tree.is_subtree(subtree));
 
 }
+
+
+TEST(TestTree, balance_empty){
+
+    Tree<int> tree;
+
+    tree.balance();
+
+    EXPECT_THROW(tree.get_root(), root_is_empty);
+
+}
+
+TEST(TestTree, balance_root){
+
+    Tree<int> tree(10);
+
+    tree.balance();
+
+    EXPECT_EQ(tree.get_root(), 10);
+    EXPECT_EQ(tree.to_string(), "10 ");
+
+}
+
+TEST(TestTree, balance_sorted){
+
+    Tree<int> tree;
+
+    for (int i = 1; i <= 7; i++){
+
+        tree.add(i);
+
+    }
+
+    tree.balance();
+
+    EXPECT_EQ(tree.get_root(), 4);
+    EXPECT_EQ(tree.to_string(), "4 2 1 3 6 5 7 ");
+
+}
+
+TEST(TestTree, balance_reverse){
+
+    Tree<int> tree;
+
+    for (int i = 7; i >= 1; i--){
+
+        tree.add(i);
+
+    }
+
+    tree.balance();
+
+    EXPECT_EQ(tree.get_root(), 4);
+    EXPECT_EQ(tree.to_string(), "4 2 1 3 6 5 7 ");
+
+}
+
+TEST(TestTree, balance_five){
+
+    Tree<int> tree;
+
+    for (int i = 1; i <= 5; i++){
+
+        tree.add(i);
+
+    }
+
+    tree.balance();
+
+    EXPECT_EQ(tree.get_root(), 4);
+    EXPECT_EQ(tree.to_string(), "4 2 1 3 5 ");
+
+}
+
+TEST(TestTree, balance_duplicates){
+
+    Tree<int> tree;
+
+    for (int i = 1; i <= 7; i++){
+
+        tree.add(i);
+
+    }
+
+    tree.add(4);
+    tree.add(4);
+
+    tree.balance();
+
+    EXPECT_EQ(tree.get_root(), 4);
+    EXPECT_EQ(tree.to_string(), "4 4 4 2 1 3 6 5 7 ");
+
+    EXPECT_TRUE(tree.remove(4));
+    EXPECT_EQ(tree.to_string(), "4 4 2 1 3 6 5 7 ");
+
+}
+
+TEST(TestTree, balance_twice){
+
+    Tree<int> tree;
+
+    for (int i = 1; i <= 7; i++){
+
+        tree.add(i);
+
+    }
+
+    tree.balance();
+
+    std::string first = tree.to_string();
+
+    tree.balance();
+
+    EXPECT_EQ(tree.to_string(), first);
+
+}
+
+TEST(TestTree, balance_string){
+
+    Tree<std::string> tree;
+
+    tree.add("a");
+    tree.add("b");
+    tree.add("c");
+    tree.add("d");
+    tree.add("e");
+    tree.add("f");
+    tree.add("g");
+
+    tree.balance();
+
+    EXPECT_EQ(tree.get_root(), "d");
+    EXPECT_EQ(tree.to_string(), "d b a c f e g ");
+
+}

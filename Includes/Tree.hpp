@@ -86,6 +86,96 @@ template <typename T> class Tree{
 
         }
 
+        void left_rotate(std::unique_ptr<Node>& curr){
+
+            if ((curr == nullptr) || curr->right == nullptr){
+
+                return;
+
+            }
+   
+            Node* parent = curr->parent;
+            auto new_root = std::move(curr->right);
+
+            if (new_root->left != nullptr){
+
+                curr->right = std::move(new_root->left);
+                curr->right->parent = curr.get();
+
+            }
+
+            new_root->parent = parent;
+            new_root->left = std::move(curr);
+            new_root->left->parent = new_root.get();
+
+            curr = std::move(new_root);
+
+        }
+
+        void right_rotate(std::unique_ptr<Node>& curr){
+
+            if ((curr == nullptr) || curr->left == nullptr){
+
+                return;
+
+            }
+   
+            Node* parent = curr->parent;
+            auto new_root = std::move(curr->left);
+
+            if (new_root->right != nullptr){
+
+                curr->left = std::move(new_root->right);
+                curr->left->parent = curr.get();
+
+            }
+
+            new_root->parent = parent;
+            new_root->right = std::move(curr);
+            new_root->right->parent = new_root.get();
+
+            curr = std::move(new_root);
+
+        }
+
+        size_t make_chain(){
+
+            size_t node_count = 0;
+            std::unique_ptr<Node>* curr = &root;
+
+            while (*curr != nullptr){
+
+                if ((*curr)->left != nullptr){
+
+                    right_rotate(*curr);
+
+                }
+                else{
+
+                    curr = &(*curr)->right;
+                    ++node_count;
+
+                }
+
+            }
+
+            return node_count;
+
+        }
+
+        void compress(size_t count){
+
+            std::unique_ptr<Node>* curr = &root;
+
+            for (size_t i = 0; i < count; ++i){
+
+                left_rotate(*curr);
+                curr = &(*curr)->right;
+
+            }
+
+        }
+
     public:
 
         Tree(){}
@@ -382,6 +472,27 @@ template <typename T> class Tree{
 
         }
 
+        void balance(){
 
+            size_t count = make_chain();
+            size_t m = 1;
+
+            while (m <= (count + 1) / 2){
+
+                m *= 2;
+
+            }
+
+            --m;
+            compress(count - m);
+
+            while (m > 1){
+
+                m /= 2;
+                compress(m);
+
+            }
+
+        }
 
 };

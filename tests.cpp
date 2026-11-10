@@ -193,7 +193,7 @@ TEST(TestTree, remove_root_with_two_children){
 
     EXPECT_TRUE(tree.remove(10));
 
-    EXPECT_EQ(tree.get_root(), 5);
+    EXPECT_EQ(tree.get_root(), 8);
     EXPECT_FALSE(tree.find(10));
     EXPECT_TRUE(tree.find(5));
     EXPECT_TRUE(tree.find(15));
@@ -409,7 +409,7 @@ TEST(TestTree, reduce_different_type){
 
     });
 
-    EXPECT_EQ(res, "10 20 30 ");
+    EXPECT_EQ(res, "20 10 30 ");
 
 }
 
@@ -482,13 +482,7 @@ TEST(TestTree, get_subtree_tree){
 
     Tree<int> res = tree.get_subtree(10);
 
-    EXPECT_EQ(res.get_root(), 10);
-    EXPECT_TRUE(res.find(10));
-    EXPECT_TRUE(res.find(5));
-    EXPECT_TRUE(res.find(15));
-    EXPECT_TRUE(res.find(3));
-    EXPECT_TRUE(res.find(20));
-    
+    EXPECT_EQ(res.to_string(), "5 3 15 10 20 ");
     EXPECT_EQ(tree.get_root(), 10);
 
 }
@@ -629,7 +623,7 @@ TEST(TestTree, from_string_invalid){
 
 }
 
-TEST(TestTree, to_str_from_str_to_str_eq){
+TEST(TestTree, from_string_avl){
 
     Tree<int> tree;
 
@@ -639,11 +633,9 @@ TEST(TestTree, to_str_from_str_to_str_eq){
     tree.add(3);
     tree.add(7);
 
-    std::string str = tree.to_string();
+    Tree<int> res = Tree<int>::from_string(tree.to_string());
 
-    Tree<int> res = Tree<int>::from_string(str);
-
-    EXPECT_EQ(res.to_string(), tree.to_string());
+    EXPECT_EQ(res.to_string(), "5 3 10 7 15 ");
 
 }
 
@@ -824,137 +816,134 @@ TEST(TestTree, is_subtree_4){
 
 }
 
-
-TEST(TestTree, balance_empty){
-
-    Tree<int> tree;
-
-    tree.balance();
-
-    EXPECT_THROW(tree.get_root(), root_is_empty);
-
-}
-
-TEST(TestTree, balance_root){
-
-    Tree<int> tree(10);
-
-    tree.balance();
-
-    EXPECT_EQ(tree.get_root(), 10);
-    EXPECT_EQ(tree.to_string(), "10 ");
-
-}
-
-TEST(TestTree, balance_sorted){
+TEST(TestTree, avl_insert_LL){
 
     Tree<int> tree;
 
-    for (int i = 1; i <= 7; i++){
+    tree.add(30);
+    tree.add(20);
+    tree.add(10);
 
-        tree.add(i);
-
-    }
-
-    tree.balance();
-
-    EXPECT_EQ(tree.get_root(), 4);
-    EXPECT_EQ(tree.to_string(), "4 2 1 3 6 5 7 ");
+    EXPECT_EQ(tree.to_string(), "20 10 30 ");
 
 }
 
-TEST(TestTree, balance_reverse){
+TEST(TestTree, avl_insert_RR){
 
     Tree<int> tree;
 
-    for (int i = 7; i >= 1; i--){
+    tree.add(10);
+    tree.add(20);
+    tree.add(30);
 
-        tree.add(i);
-
-    }
-
-    tree.balance();
-
-    EXPECT_EQ(tree.get_root(), 4);
-    EXPECT_EQ(tree.to_string(), "4 2 1 3 6 5 7 ");
+    EXPECT_EQ(tree.to_string(), "20 10 30 ");
 
 }
 
-TEST(TestTree, balance_five){
+TEST(TestTree, avl_insert_LR){
 
     Tree<int> tree;
 
-    for (int i = 1; i <= 5; i++){
+    tree.add(30);
+    tree.add(10);
+    tree.add(20);
 
-        tree.add(i);
-
-    }
-
-    tree.balance();
-
-    EXPECT_EQ(tree.get_root(), 4);
-    EXPECT_EQ(tree.to_string(), "4 2 1 3 5 ");
+    EXPECT_EQ(tree.to_string(), "20 10 30 ");
 
 }
 
-TEST(TestTree, balance_duplicates){
+TEST(TestTree, avl_insert_RL){
 
     Tree<int> tree;
 
-    for (int i = 1; i <= 7; i++){
+    tree.add(10);
+    tree.add(30);
+    tree.add(20);
 
-        tree.add(i);
-
-    }
-
-    tree.add(4);
-    tree.add(4);
-
-    tree.balance();
-
-    EXPECT_EQ(tree.get_root(), 4);
-    EXPECT_EQ(tree.to_string(), "4 4 4 2 1 3 6 5 7 ");
-
-    EXPECT_TRUE(tree.remove(4));
-    EXPECT_EQ(tree.to_string(), "4 4 2 1 3 6 5 7 ");
+    EXPECT_EQ(tree.to_string(), "20 10 30 ");
 
 }
 
-TEST(TestTree, balance_twice){
+TEST(TestTree, avl_remove_LL){
 
     Tree<int> tree;
 
-    for (int i = 1; i <= 7; i++){
+    tree.add(30);
+    tree.add(20);
+    tree.add(40);
+    tree.add(10);
+    tree.add(25);
 
-        tree.add(i);
-
-    }
-
-    tree.balance();
-
-    std::string first = tree.to_string();
-
-    tree.balance();
-
-    EXPECT_EQ(tree.to_string(), first);
+    EXPECT_TRUE(tree.remove(40));
+    EXPECT_EQ(tree.to_string(), "20 10 30 25 ");
 
 }
 
-TEST(TestTree, balance_string){
+TEST(TestTree, avl_remove_RR){
 
-    Tree<std::string> tree;
+    Tree<int> tree;
 
-    tree.add("a");
-    tree.add("b");
-    tree.add("c");
-    tree.add("d");
-    tree.add("e");
-    tree.add("f");
-    tree.add("g");
+    tree.add(20);
+    tree.add(10);
+    tree.add(30);
+    tree.add(25);
+    tree.add(40);
 
-    tree.balance();
+    EXPECT_TRUE(tree.remove(10));
+    EXPECT_EQ(tree.to_string(), "30 20 25 40 ");
 
-    EXPECT_EQ(tree.get_root(), "d");
-    EXPECT_EQ(tree.to_string(), "d b a c f e g ");
+}
+
+TEST(TestTree, avl_remove_LR){
+
+    Tree<int> tree;
+
+    tree.add(30);
+    tree.add(20);
+    tree.add(40);
+    tree.add(25);
+
+    EXPECT_TRUE(tree.remove(40));
+    EXPECT_EQ(tree.to_string(), "25 20 30 ");
+
+}
+
+TEST(TestTree, avl_remove_RL){
+
+    Tree<int> tree;
+
+    tree.add(20);
+    tree.add(10);
+    tree.add(30);
+    tree.add(25);
+
+    EXPECT_TRUE(tree.remove(10));
+    EXPECT_EQ(tree.to_string(), "25 20 30 ");
+
+}
+
+TEST(TestTree, avl_remove_duplicate_predecessor){
+
+    Tree<int> tree;
+
+    tree.add(20);
+    tree.add(10);
+    tree.add(30);
+    tree.add(5);
+    tree.add(15);
+    tree.add(25);
+    tree.add(35);
+    tree.add(15);
+    tree.add(15);
+
+    EXPECT_TRUE(tree.remove(20));
+    EXPECT_EQ(tree.to_string(), "15 15 15 10 5 30 25 35 ");
+
+    EXPECT_TRUE(tree.remove(15));
+    EXPECT_TRUE(tree.remove(15));
+    EXPECT_EQ(tree.to_string(), "15 10 5 30 25 35 ");
+
+    EXPECT_TRUE(tree.remove(15));
+    EXPECT_EQ(tree.to_string(), "10 5 30 25 35 ");
 
 }

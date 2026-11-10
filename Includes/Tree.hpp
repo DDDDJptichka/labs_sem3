@@ -3,8 +3,9 @@
 #include <memory>
 
 #include "Exception.hpp"
+#include "ICollection.hpp"
 
-template <typename T> class Tree{
+template <typename T> class Tree : public ICollection<T>{
 
     private:
 
@@ -12,6 +13,7 @@ template <typename T> class Tree{
 
             T data;
             size_t count = 1;
+            int height = 0;
             Node* parent = nullptr;
             std::unique_ptr<Node> left = nullptr;
             std::unique_ptr<Node> right = nullptr;
@@ -21,6 +23,7 @@ template <typename T> class Tree{
         };
 
         std::unique_ptr<Node> root = nullptr;
+        size_t members_count = 0;
 
         Node* find_internal(const T& value) const{
 
@@ -86,6 +89,30 @@ template <typename T> class Tree{
 
         }
 
+        int node_height(const Node* node) const{
+
+            if (node == nullptr){
+
+                return -1;
+
+            }
+
+            return node->height;
+
+        }
+
+        void update_height(Node* node){
+
+            node->height = 1 + std::max(node_height(node->left.get()), node_height(node->right.get()));
+
+        }
+
+        int balance_factor(const Node* node) const{
+
+            return node_height(node->left.get()) - node_height(node->right.get());
+
+        }
+
         void left_rotate(std::unique_ptr<Node>& curr){
 
             if ((curr == nullptr) || curr->right == nullptr){
@@ -108,6 +135,8 @@ template <typename T> class Tree{
             new_root->left = std::move(curr);
             new_root->left->parent = new_root.get();
 
+            update_height(new_root->left.get());
+            update_height(new_root.get());
             curr = std::move(new_root);
 
         }
@@ -134,7 +163,75 @@ template <typename T> class Tree{
             new_root->right = std::move(curr);
             new_root->right->parent = new_root.get();
 
+            update_height(new_root->right.get());
+            update_height(new_root.get());
             curr = std::move(new_root);
+
+        }
+
+        void rebalance(std::unique_ptr<Node>& curr){
+
+            if (curr == nullptr){
+
+                return;
+
+            }
+
+            update_height(curr.get());
+
+            if (balance_factor(curr.get()) > 1){
+
+                if (balance_factor(curr->left.get()) < 0){
+
+                    left_rotate(curr->left);
+
+                }
+
+                right_rotate(curr);
+
+            }
+            else if (balance_factor(curr.get()) < -1){
+
+                if (balance_factor(curr->right.get()) > 0){
+
+                    right_rotate(curr->right);
+
+                }
+
+                left_rotate(curr);
+
+            }
+
+        }
+
+        std::unique_ptr<Node>& owner(Node* node){
+
+            if (node->parent == nullptr){
+
+                return root;
+
+            }
+
+            if (node->parent->left.get() == node){
+
+                return node->parent->left;
+
+            }
+
+            return node->parent->right;
+
+        }
+
+        void rebalance_up(Node* node){
+
+            while (node != nullptr){
+
+                Node* parent = node->parent;
+
+                rebalance(owner(node));
+                node = parent;
+
+            }
 
         }
 
@@ -163,26 +260,15 @@ template <typename T> class Tree{
 
         }
 
-        void compress(size_t count){
-
-            std::unique_ptr<Node>* curr = &root;
-
-            for (size_t i = 0; i < count; ++i){
-
-                left_rotate(*curr);
-                curr = &(*curr)->right;
-
-            }
-
-        }
-
     public:
 
         Tree(){}
 
         Tree(const T& root_value) : root(std::make_unique<Node>(root_value)){}
 
-        void add(const T& value){
+        void add(const T& value) override{
+
+            ++members_count;
 
             if (root == nullptr){
 
@@ -208,6 +294,9 @@ template <typename T> class Tree{
 
                         curr->left = std::make_unique<Node>(value);
                         curr->left.get()->parent = curr;
+
+                        rebalance_up(curr);
+
                         return;
 
                     }
@@ -221,6 +310,9 @@ template <typename T> class Tree{
 
                         curr->right = std::make_unique<Node>(value);
                         curr->right.get()->parent = curr;
+
+                        rebalance_up(curr);
+
                         return;
 
                     }
@@ -233,13 +325,13 @@ template <typename T> class Tree{
 
         }
 
-        bool find(const T& value) const{
+        bool find(const T& value) const override{
 
             return (find_internal(value) != nullptr);
 
         }
 
-        bool remove(const T& value){
+        bool remove(const T& value) override{
 
             Node* curr = find_internal(value);
 
@@ -257,24 +349,6 @@ template <typename T> class Tree{
 
             }
 
-            std::unique_ptr<Node>* owner = nullptr;
-            
-            if (curr->parent == nullptr){
-
-                owner = &root;
-
-            }
-            else if (curr->parent->left.get() == curr){
-
-                owner = &curr->parent->left;
-
-            }
-            else{
-
-                owner = &curr->parent->right;
-
-            }
-
             if ((curr->left != nullptr) && (curr->right != nullptr)){
 
                 Node* max_left = curr->left.get();
@@ -285,11 +359,15 @@ template <typename T> class Tree{
 
                 }
 
-                max_left->right = std::move(curr->right);
-                max_left->right.get()->parent = max_left;
+                curr->data = max_left->data;
+                curr->count = max_left->count;
+
+                curr = max_left;
 
             }
 
+            Node* parent = curr->parent;
+            std::unique_ptr<Node>& curr_owner = owner(curr);
             std::unique_ptr<Node> child;
 
             if (curr->left != nullptr){
@@ -305,13 +383,39 @@ template <typename T> class Tree{
 
             if (child != nullptr){
 
-                child.get()->parent = curr->parent;
+                child.get()->parent = parent;
 
             }
 
-            *owner = std::move(child);
+            curr_owner = std::move(child);
+            rebalance_up(parent);
 
             return true;
+
+        }
+
+        size_t get_count() const override{
+
+            return members_count;
+
+        }
+
+        bool is_empty() const override{
+
+            if (members_count == 0){
+
+                return true;
+
+            }
+
+            return false;
+
+        }
+
+        void clear() override{
+
+            root.reset();
+            members_count = 0;
 
         }
         
@@ -469,29 +573,6 @@ template <typename T> class Tree{
             }
 
             return is_subtree_internal(start, subtree.root.get());
-
-        }
-
-        void balance(){
-
-            size_t count = make_chain();
-            size_t m = 1;
-
-            while (m <= (count + 1) / 2){
-
-                m *= 2;
-
-            }
-
-            --m;
-            compress(count - m);
-
-            while (m > 1){
-
-                m /= 2;
-                compress(m);
-
-            }
 
         }
 

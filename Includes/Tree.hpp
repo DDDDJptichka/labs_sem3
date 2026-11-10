@@ -266,6 +266,8 @@ template <typename T> class Tree : public ICollection<T>{
 
         Tree(const T& root_value) : root(std::make_unique<Node>(root_value)){}
 
+        Tree(Tree&& another) noexcept : root(std::move(another.root)), members_count(another.members_count){}
+
         void add(const T& value) override{
 
             ++members_count;

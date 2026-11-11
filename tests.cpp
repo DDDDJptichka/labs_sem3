@@ -947,3 +947,90 @@ TEST(TestTree, avl_remove_duplicate_predecessor){
     EXPECT_EQ(tree.to_string(), "10 5 30 25 35 ");
 
 }
+
+TEST(TestTree, copy_constructor){
+
+    Tree<int> a;
+
+    for (int x : {10, 5, 15, 5}){
+
+        a.add(x);
+    
+    }
+
+    Tree<int> b(a);
+
+    EXPECT_EQ(a.to_string(), b.to_string());
+    EXPECT_EQ(b.get_count(), 4);
+
+    b.remove(5);
+
+    EXPECT_EQ(a.to_string(), "10 5 5 15 ");
+    EXPECT_EQ(b.to_string(), "10 5 15 ");
+
+}
+
+TEST(TestTree, move_constructor){
+
+    Tree<int> a(10);
+    a.add(5);
+    a.add(15);
+
+    Tree<int> b(std::move(a));
+
+    EXPECT_TRUE(a.is_empty());
+    EXPECT_EQ(a.get_count(), 0);
+
+    EXPECT_EQ(b.to_string(), "10 5 15 ");
+    EXPECT_EQ(b.get_count(), 3);
+
+}
+
+TEST(TestTree, copy_assignment){
+
+    Tree<int> a(10);
+    a.add(5);
+
+    Tree<int> b(100);
+
+    b = a;
+
+    EXPECT_EQ(b.to_string(), "10 5 ");
+    EXPECT_EQ(b.get_count(), 2);
+
+    b.add(20);
+
+    EXPECT_EQ(a.to_string(), "10 5 ");
+
+}
+
+TEST(TestTree, move_assignment){
+
+    Tree<int> a(10);
+    a.add(5);
+
+    Tree<int> b(100);
+    b = std::move(a);
+
+    EXPECT_TRUE(a.is_empty());
+    EXPECT_EQ(a.get_count(), 0);
+
+    EXPECT_EQ(b.to_string(), "10 5 ");
+    EXPECT_EQ(b.get_count(), 2);
+
+}
+
+
+TEST(TestTree, self_assignment){
+
+    Tree<int> tree(10);
+
+    tree.add(5);
+    tree.add(15);
+
+    tree = tree;
+
+    EXPECT_EQ(tree.to_string(), "10 5 15 ");
+    EXPECT_EQ(tree.get_count(), 3);
+
+}

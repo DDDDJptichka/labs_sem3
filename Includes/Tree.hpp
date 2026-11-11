@@ -235,28 +235,24 @@ template <typename T> class Tree : public ICollection<T>{
 
         }
 
-        size_t make_chain(){
+        std::unique_ptr<Node> clone(const Node* node, Node* parent = nullptr){
 
-            size_t node_count = 0;
-            std::unique_ptr<Node>* curr = &root;
+            if (node == nullptr){
 
-            while (*curr != nullptr){
-
-                if ((*curr)->left != nullptr){
-
-                    right_rotate(*curr);
-
-                }
-                else{
-
-                    curr = &(*curr)->right;
-                    ++node_count;
-
-                }
+                return nullptr;
 
             }
 
-            return node_count;
+            auto copy = std::make_unique<Node>(node->data);
+
+            copy->count = node->count;
+            copy->height = node->height;
+            copy->parent = parent;
+
+            copy->left = clone(node->left.get(), copy.get());
+            copy->right = clone(node->right.get(), copy.get());
+            
+            return copy;
 
         }
 
@@ -264,9 +260,40 @@ template <typename T> class Tree : public ICollection<T>{
 
         Tree(){}
 
-        Tree(const T& root_value) : root(std::make_unique<Node>(root_value)){}
+        Tree(const T& root_value) : root(std::make_unique<Node>(root_value)), members_count(1){}
 
-        Tree(Tree&& another) noexcept : root(std::move(another.root)), members_count(another.members_count){}
+        Tree(const Tree<T>& another) : root(clone(another.root.get())), members_count(another.members_count){}
+
+        Tree(Tree&& another) noexcept : root(std::move(another.root)), members_count(another.members_count){another.members_count = 0;}
+
+        Tree& operator=(const Tree& another){
+
+            if (this != &another){
+
+                Tree copy(another);
+                root = std::move(copy.root);
+                members_count = another.members_count;
+
+            }
+
+            return *this;
+
+        }
+
+        Tree& operator=(Tree&& another) noexcept{
+
+            if (this != &another){
+
+                root = std::move(another.root);
+                members_count = another.members_count;
+
+                another.members_count = 0;
+
+            }
+
+            return *this;
+
+        }
 
         void add(const T& value) override{
 

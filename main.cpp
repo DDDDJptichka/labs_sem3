@@ -11,6 +11,16 @@
 #include "Includes/Tree.hpp"
 #include "Includes/Exception.hpp"
 
+template <typename Func> double operation_time(Func f){
+
+    auto start = std::chrono::steady_clock::now();
+    f();
+    auto end = std::chrono::steady_clock::now();
+
+    return std::chrono::duration<double, std::micro>(end - start).count();
+
+}
+
 int read_int(const std::string& message){
 
     while (true){
@@ -99,22 +109,35 @@ int main(){
                 case 1:{
                     
                     int value = read_int("Число: ");
-                    tree.add(value);
+
+                    double time = operation_time([&tree, value](){tree.add(value);});
+
                     std::cout << "Элемент добавлен.\n";
-                    
+                    std::cout << "Время: " << time << " мкс\n";
+
                     break;
                 }
                 case 2:{
 
                     int value = read_int("Число: ");
-                    std::cout << (tree.remove(value) ? "Элемент удалён.\n" : "Элемент не найден.\n");
+                    bool removed;
+
+                    double time = operation_time([&tree, value, &removed](){removed = tree.remove(value);});
+                    
+                    std::cout << (removed ? "Элемент удалён.\n" : "Элемент не найден.\n");
+                    std::cout << "Время: " << time << " мкс\n";
                     
                     break;
                 }
                 case 3:{
 
                     int value = read_int("Число: ");
-                    std::cout << (tree.find(value) ? "Элемент найден.\n" : "Элемент не найден.\n");
+                    bool found;
+
+                    double time = operation_time([&tree, value, &found](){found = tree.find(value);});
+                    
+                    std::cout << (found ? "Элемент найден.\n" : "Элемент не найден.\n");
+                    std::cout << "Время: " << time << " мкс\n";
                     
                     break;
                 }
@@ -148,8 +171,10 @@ int main(){
                 }
                 case 7:{
                     
-                    tree.clear();
+                    double time = operation_time([&tree](){tree.clear();});
+
                     std::cout << "Дерево очищено.\n";
+                    std::cout << "Время: " << time << " мкс\n";
                     
                     break;
                 }
@@ -165,8 +190,12 @@ int main(){
                     }
                     else{
                         
-                        Tree<int> subtree = tree.get_subtree(value);
+                        Tree<int> subtree;
+                        
+                        double time = operation_time([&subtree, value, &tree](){subtree = tree.get_subtree(value);});
+                        
                         std::cout << "Поддерево (КЛП): " << subtree.to_string() << '\n';
+                        std::cout << "Время: " << time << " мкс\n";
                     
                     }
                     
@@ -176,30 +205,47 @@ int main(){
                     
                     std::string line = read_line("Элементы проверяемого дерева через пробел: ");
                     Tree<int> subtree = Tree<int>::from_string(line);
-                    std::cout << (tree.is_subtree(subtree) ? "Поддерево входит.\n" : "Поддерево не входит.\n");
+                    bool is_sub;
+
+                    double time = operation_time([&tree, &subtree, &is_sub](){is_sub = tree.is_subtree(subtree);});
+
+                    std::cout << (is_sub ? "Поддерево входит.\n" : "Поддерево не входит.\n");
+                    std::cout << "Время: " << time << " мкс\n";
                     
                     break;
                 }
                 case 10:{
                     
+                    Tree<int> result;
                     int value = read_int("Сколько прибавить: ");
-                    Tree<int> result = tree.map([value](int x){ return x + value;});
+                    
+                    double time = operation_time([&result, &tree, value](){result = tree.map([value](int x){ return x + value;});});
+                    
                     std::cout << "Результат map (КЛП): " << result.to_string() << '\n';
+                    std::cout << "Время: " << time << " мкс\n";
                     
                     break;
                 }
                 case 11:{
                     
+                    Tree<int> result;
                     int value = read_int("Минимальное значение: ");
-                    Tree<int> result = tree.where([value](int x){ return x >= value;});
+
+                    double time = operation_time([&result, &tree, value](){result = tree.where([value](int x){ return x >= value;});});
+
                     std::cout << "Результат where (КЛП): " << result.to_string() << '\n';
+                    std::cout << "Время: " << time << " мкс\n";
                     
                     break;
                 }
                 case 12:{
                     
-                    long long sum = tree.reduce(0LL, [](long long res, int x){return res + x;});
+                    long long sum;
+
+                    double time = operation_time([&sum, &tree](){sum = tree.reduce(0LL, [](long long res, int x){return res + x;});});
+
                     std::cout << "Сумма элементов: " << sum << '\n';
+                    std::cout << "Время: " << time << " мкс\n";
                     
                     break;
                 }
@@ -236,17 +282,17 @@ int main(){
                     
                     break;
                 }
-
                 case 14:{
-                    
+
                     std::string line = read_line("Введите целые числа через пробел: ");
-                    Tree<int> result = Tree<int>::from_string(line);
-                    tree = std::move(result);
+
+                    double time = operation_time([&tree, &line](){tree = Tree<int>::from_string(line);});
+
                     std::cout << "Дерево создано: " << tree.to_string() << '\n';
-                    
+                    std::cout << "Время: " << time << " мкс\n";
+
                     break;
                 }
-
                 default:
                     
                     std::cout << "Такого пункта нет.\n";

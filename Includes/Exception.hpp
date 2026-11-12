@@ -36,3 +36,11 @@ class invalid_str : public exception{
         explicit invalid_str(const std::string &msg) : exception(msg){}
 
 };
+
+class input_error : public exception{
+
+    public:
+
+        explicit input_error(const std::string &msg) : exception(msg){}
+
+};

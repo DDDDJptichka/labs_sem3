@@ -158,7 +158,7 @@ void GameWindow::make_bot_move(){
     auto time1 = std::chrono::duration_cast<std::chrono::milliseconds>(end1 - start1);
     auto time2 = std::chrono::duration_cast<std::chrono::milliseconds>(end2 - start2);
 
-    std::cout<<"Alpha-beta time: " << time1.count() << " ms\n" << "Simple minimax: " << time2.count() << "ms\n\n" << (pos == pos2);
+    std::cout<<"Alpha-beta time: " << time1.count() << " ms\n" << "Simple minimax: " << time2.count() << "ms\n\n" << (pos == pos2) << " ";
 
     board.make_move(pos, Cell::O);
     update();

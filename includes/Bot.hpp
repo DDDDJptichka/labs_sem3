@@ -238,24 +238,11 @@ class Bot{
                 if (board.check_win(curr, bot_cell)){
 
                     board.remove_move(curr);
-
                     return curr;
 
                 }
 
-                long long int check_sum = 0;
-
-                if (board.check_win(curr, bot_cell)){
-
-                    check_sum = INF;
-
-                }
-                else{
-
-                    check_sum = minimax(board, depth - 1, a, INF, false, use_a_b);
-
-                }
-
+                long long int check_sum = minimax(board, depth - 1, a, INF, false, use_a_b);
                 board.remove_move(curr);
 
                 if (check_sum > best){

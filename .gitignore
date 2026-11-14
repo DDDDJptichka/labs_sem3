@@ -1,0 +1,7 @@
+.vscode
+*.exe
+*.o
+*.obj
+*.a
+build/
+run.txt

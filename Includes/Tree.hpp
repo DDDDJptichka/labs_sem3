@@ -1,11 +1,12 @@
 #pragma once
 
 #include <memory>
+#include <functional>
 
 #include "Exception.hpp"
 #include "ICollection.hpp"
 
-template <typename T> class Tree : public ICollection<T>{
+template <typename T, class Compare = std::less<T>> class Tree : public ICollection<T>{
 
     private:
 
@@ -24,6 +25,19 @@ template <typename T> class Tree : public ICollection<T>{
 
         std::unique_ptr<Node> root = nullptr;
         size_t members_count = 0;
+        Compare cmp;
+
+        bool less(const T& a, const T& b) const{
+
+            return cmp(a, b);
+
+        }
+
+        bool equal(const T& a, const T& b) const{
+
+            return !cmp(a, b) && !cmp(b, a);
+
+        }
 
         Node* find_internal(const T& value) const{
 
@@ -31,12 +45,12 @@ template <typename T> class Tree : public ICollection<T>{
 
             while (curr != nullptr){
 
-                if (value == curr->data){
+                if (equal(value, curr->data)){
 
                     return curr;
 
                 }
-                else if (value < curr->data){
+                else if (less(value, curr->data)){
 
                     curr = curr->left.get();
 
@@ -61,7 +75,7 @@ template <typename T> class Tree : public ICollection<T>{
 
             }
 
-            if ((a->data != b->data) || (a->count != b->count)){
+            if (!equal(a->data, b->data) || !equal(a->count, b->count)){
 
                 return false;
 
@@ -258,19 +272,25 @@ template <typename T> class Tree : public ICollection<T>{
 
     public:
 
-        Tree(){}
+        Tree(const Compare& comp = Compare()) : cmp(comp){}
 
-        Tree(const T& root_value) : root(std::make_unique<Node>(root_value)), members_count(1){}
+        Tree(const T& root_value, const Compare& comp = Compare()) : root(std::make_unique<Node>(root_value)), members_count(1), cmp(comp){}
 
-        Tree(const Tree<T>& another) : root(clone(another.root.get())), members_count(another.members_count){}
+        Tree(const Tree<T>& another) : root(clone(another.root.get())), members_count(another.members_count), cmp(another.cmp){}
 
-        Tree(Tree&& another) noexcept : root(std::move(another.root)), members_count(another.members_count){another.members_count = 0;}
+        Tree(Tree&& another) noexcept : root(std::move(another.root)), members_count(another.members_count), cmp(std::move(another.cmp)){
+            
+            another.members_count = 0;
+        
+        }
 
         Tree& operator=(const Tree& another){
 
             if (this != &another){
 
                 Tree copy(another);
+
+                cmp = copy.cmp;
                 root = std::move(copy.root);
                 members_count = another.members_count;
 
@@ -284,6 +304,7 @@ template <typename T> class Tree : public ICollection<T>{
 
             if (this != &another){
 
+                cmp = std::move(another.cmp);
                 root = std::move(another.root);
                 members_count = another.members_count;
 
@@ -310,14 +331,14 @@ template <typename T> class Tree : public ICollection<T>{
 
             while (true){
 
-                if (value == curr->data){
+                if (equal(value, curr->data)){
 
                     ++curr->count;
                     
                     return;
 
                 }
-                else if (value < curr->data){
+                else if (less(value, curr->data)){
 
                     if (curr->left == nullptr){
 
@@ -481,7 +502,7 @@ template <typename T> class Tree : public ICollection<T>{
 
         template <typename Func> Tree<T> map(Func f) const{
 
-            Tree<T> res;
+            Tree<T> res(cmp);
 
             auto action = [&](const T& value){
 
@@ -497,7 +518,7 @@ template <typename T> class Tree : public ICollection<T>{
 
         template <typename Func> Tree<T> where(Func f) const{
 
-            Tree<T> res;
+            Tree<T> res(cmp);
 
             auto filter = [&](const T& value){
 
@@ -528,7 +549,7 @@ template <typename T> class Tree : public ICollection<T>{
 
         Tree<T> get_subtree(const T& root_value) const{
 
-            Tree<T> subtree;
+            Tree<T> subtree(cmp);
 
             auto action = [&](const T& value){subtree.add(value);};
             travel(find_internal(root_value), action);
@@ -548,9 +569,9 @@ template <typename T> class Tree : public ICollection<T>{
 
         }
 
-        static Tree<T> from_string(const std::string& str){
+        static Tree<T> from_string(const std::string& str, const Compare& comp = Compare()){
 
-            Tree<T> res;
+            Tree<T> res(comp);
             std::istringstream stream(str);
             T value;
 
@@ -583,12 +604,12 @@ template <typename T> class Tree : public ICollection<T>{
 
             while (start != nullptr){
 
-                if (sub_data == start->data){
+                if (equal(sub_data, start->data)){
 
                     break;
 
                 }
-                else if (sub_data < start->data){
+                else if (less(sub_data, start->data)){
 
                     start = start->left.get();
 

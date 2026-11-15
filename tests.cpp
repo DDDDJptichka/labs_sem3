@@ -1034,3 +1034,19 @@ TEST(TestTree, self_assignment){
     EXPECT_EQ(tree.get_count(), 3);
 
 }
+
+TEST(TestTree, custom_comparator){
+
+    Tree<int, std::greater<int>> tree;
+
+    tree.add(10);
+    tree.add(20);
+    tree.add(5);
+
+    EXPECT_EQ(tree.get_root(), 10);
+    EXPECT_EQ(tree.to_string(), "10 20 5 ");
+
+    EXPECT_TRUE(tree.find(20));
+    EXPECT_TRUE(tree.find(5));
+
+}

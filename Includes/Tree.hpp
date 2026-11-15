@@ -231,7 +231,7 @@ template <typename T, class Compare = std::less<T>> class Tree : public ICollect
 
         }
 
-        std::unique_ptr<Node> clone(const Node* node, Node* parent = nullptr){
+        std::unique_ptr<Node> clone(const Node* node, Node* parent = nullptr) const{
 
             if (node == nullptr){
 
@@ -373,6 +373,8 @@ template <typename T, class Compare = std::less<T>> class Tree : public ICollect
 
             }
 
+            --members_count;
+
             if (curr->count > 1){
 
                 --curr->count;
@@ -463,7 +465,7 @@ template <typename T, class Compare = std::less<T>> class Tree : public ICollect
 
         }
 
-        template <typename Func> void travel(Node* start, Func& f) const{
+        template <typename Func> void travel(const Node* start, Func& f) const{
 
             if (start == nullptr){
 
@@ -484,13 +486,9 @@ template <typename T, class Compare = std::less<T>> class Tree : public ICollect
 
         template <typename Func> Tree<T> map(Func f) const{
 
-            Tree<T> res(cmp);
+            Tree res(cmp);
 
-            auto action = [&](const T& value){
-
-                res.add(f(value));
-
-            };
+            auto action = [&](const T& value){res.add(f(value));};
 
             travel(root.get(), action);
 
@@ -533,8 +531,11 @@ template <typename T, class Compare = std::less<T>> class Tree : public ICollect
 
             Tree<T> subtree(cmp);
 
-            auto action = [&](const T& value){subtree.add(value);};
-            travel(find_internal(root_value), action);
+            Node* start = find_internal(root_value);
+            subtree.root = clone(start);
+
+            auto action = [&](const T& value){++subtree.members_count;};
+            travel(start, action);
 
             return subtree;
 

@@ -482,7 +482,7 @@ TEST(TestTree, get_subtree_tree){
 
     Tree<int> res = tree.get_subtree(10);
 
-    EXPECT_EQ(res.to_string(), "5 3 15 10 20 ");
+    EXPECT_EQ(res.to_string(), "10 5 3 15 20 ");
     EXPECT_EQ(tree.get_root(), 10);
 
 }

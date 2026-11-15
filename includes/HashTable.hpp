@@ -14,6 +14,30 @@ template <class TKey, class TElement> class HashTable : public IDictionary<TKey,
         size_t bucket_count;
         size_t (*hash_function)(TKey);
 
+        void rehash(size_t new_bucket_count){
+
+            auto new_buckets = std::make_unique<ListSequence<std::pair<TKey, TElement>>[]>(new_bucket_count);
+
+            for (size_t i = 0; i < bucket_count; ++i){
+
+                size_t len = buckets[i].get_length();
+
+                for (size_t j = 0; j < len; ++j){
+
+                    auto& elem = buckets[i][j];
+                    size_t index = hash_function(elem.first) % new_bucket_count;
+
+                    new_buckets[index].append(elem);
+
+                }
+
+            }
+
+            buckets = std::move(new_buckets);
+            bucket_count = new_bucket_count;
+
+        }
+
     public:
 
         HashTable(size_t (*hash_function)(TKey), size_t bucket_count){
@@ -90,6 +114,12 @@ template <class TKey, class TElement> class HashTable : public IDictionary<TKey,
 
             }
 
+            if ((double)(count + 1) / bucket_count > 0.777){
+
+                rehash(bucket_count * 2);
+
+            }
+
             size_t bucket_index = hash_function(key) % bucket_count;
             buckets[bucket_index].append(std::pair(key, element));
             ++count;
@@ -150,6 +180,15 @@ template <class TKey, class TElement> class HashTable : public IDictionary<TKey,
                     return buckets[bucket_index][i].second;
 
                 }
+
+            }
+
+            if ((double)(count + 1) / bucket_count > 0.777){
+
+                rehash(bucket_count * 2);
+
+                bucket_index = hash_function(key) % bucket_count;
+                bucket_size = buckets[bucket_index].get_length();
 
             }
 

@@ -75,31 +75,13 @@ template <typename T, class Compare = std::less<T>> class Tree : public ICollect
 
             }
 
-            if (!equal(a->data, b->data) || !equal(a->count, b->count)){
+            if (!equal(a->data, b->data) || (a->count != b->count)){
 
                 return false;
 
             }
 
             return is_same_tree(a->left.get(), b->left.get()) && is_same_tree(a->right.get(), b->right.get());
-
-        }
-
-        bool is_subtree_internal(const Node* start, const Node* node) const{
-
-            if (start == nullptr){
-
-                return false;
-
-            }
-
-            if (is_same_tree(start, node)){
-
-                return true;
-            
-            }
-
-            return is_subtree_internal(start->left.get(), node) || is_subtree_internal(start->right.get(), node);
 
         }
 
@@ -591,7 +573,7 @@ template <typename T, class Compare = std::less<T>> class Tree : public ICollect
 
         }
 
-        bool is_subtree(const Tree<T>& subtree) const{
+        bool is_subtree(const Tree& subtree) const{
 
             if (subtree.root == nullptr){
 
@@ -599,30 +581,9 @@ template <typename T, class Compare = std::less<T>> class Tree : public ICollect
 
             }
 
-            Node* start = root.get();
-            T sub_data = subtree.get_root();
+            Node* start = find_internal(subtree.root->data);
 
-            while (start != nullptr){
-
-                if (equal(sub_data, start->data)){
-
-                    break;
-
-                }
-                else if (less(sub_data, start->data)){
-
-                    start = start->left.get();
-
-                }
-                else{
-
-                    start = start->right.get();
-
-                }
-
-            }
-
-            return is_subtree_internal(start, subtree.root.get());
+            return is_same_tree(start, subtree.root.get());
 
         }
 

@@ -70,7 +70,7 @@ flowchart TB
     TESTS --> CONVERT
     BENCH[Измерение производительности] --> LOGIC
     BENCH --> CONVERT
-    BENCH --> RESULTS[Результаты измерений для графиков]
+    BENCH --> RESULTS[Результаты измерений]
     CLI -->|результаты и сообщения| U
 ```
 

@@ -258,7 +258,7 @@ template <typename T, class Compare = std::less<T>> class Tree : public ICollect
 
         Tree(const T& root_value, const Compare& comp = Compare()) : root(std::make_unique<Node>(root_value)), members_count(1), cmp(comp){}
 
-        Tree(const Tree<T>& another) : root(clone(another.root.get())), members_count(another.members_count), cmp(another.cmp){}
+        Tree(const Tree& another) : root(clone(another.root.get())), members_count(another.members_count), cmp(another.cmp){}
 
         Tree(Tree&& another) noexcept : root(std::move(another.root)), members_count(another.members_count), cmp(std::move(another.cmp)){
             

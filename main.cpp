@@ -219,7 +219,7 @@ int main(){
                     Tree<int> result;
                     int value = read_int("Сколько прибавить: ");
                     
-                    double time = operation_time([&result, &tree, value](){result = tree.map([value](int x){ return x + value;});});
+                    double time = operation_time([&result, &tree, value](){result = tree.map<int>([value](int x){ return x + value;});});
                     
                     std::cout << "Результат map (КЛП): " << result.to_string() << '\n';
                     std::cout << "Время: " << time << " мкс\n";

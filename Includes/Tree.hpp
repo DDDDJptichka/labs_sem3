@@ -6,7 +6,7 @@
 #include "Exception.hpp"
 #include "ICollection.hpp"
 
-template <typename T, class Compare = std::less<T>> class Tree : public ICollection<T>{
+template <typename T, class Compare = std::less<>> class Tree : public ICollection<T>{
 
     private:
 
@@ -383,9 +383,11 @@ template <typename T, class Compare = std::less<T>> class Tree : public ICollect
 
             }
 
+            Node* max_left = curr;
+
             if ((curr->left != nullptr) && (curr->right != nullptr)){
 
-                Node* max_left = curr->left.get();
+                max_left = curr->left.get();
 
                 while (max_left->right != nullptr){
 
@@ -396,32 +398,30 @@ template <typename T, class Compare = std::less<T>> class Tree : public ICollect
                 curr->data = max_left->data;
                 curr->count = max_left->count;
 
-                curr = max_left;
-
             }
 
-            Node* parent = curr->parent;
-            std::unique_ptr<Node>& curr_owner = owner(curr);
-            std::unique_ptr<Node> child;
+            Node* parent = max_left->parent;
+            std::unique_ptr<Node>& max_left_owner = owner(max_left);
+            std::unique_ptr<Node> max_left_child;
 
-            if (curr->left != nullptr){
+            if (max_left->left != nullptr){
 
-                child = std::move(curr->left);
+                max_left_child = std::move(max_left->left);
 
             }
             else{
 
-                child = std::move(curr->right);
+                max_left_child = std::move(max_left->right);
 
             }
 
-            if (child != nullptr){
+            if (max_left_child != nullptr){
 
-                child.get()->parent = parent;
+                max_left_child.get()->parent = parent;
 
             }
 
-            curr_owner = std::move(child);
+            max_left_owner = std::move(max_left_child);
             rebalance_up(parent);
 
             return true;
@@ -484,9 +484,9 @@ template <typename T, class Compare = std::less<T>> class Tree : public ICollect
 
         }
 
-        template <typename Func> Tree<T> map(Func f) const{
+        template <typename A, typename Func> Tree<A, Compare> map(Func f) const{
 
-            Tree res(cmp);
+            Tree<A, Compare> res(cmp);
 
             auto action = [&](const T& value){res.add(f(value));};
 

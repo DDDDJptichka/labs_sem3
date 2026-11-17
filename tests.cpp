@@ -278,7 +278,7 @@ TEST(TestTree, map){
     tree.add(5);
     tree.add(15);
 
-    Tree<int> res = tree.map([](int x){return x + 2;});
+    Tree<int> res = tree.map<int>([](int x){return x + 2;});
 
     EXPECT_TRUE(res.find(12));
     EXPECT_TRUE(res.find(7));
@@ -290,7 +290,7 @@ TEST(TestTree, map){
 TEST(TestTree, map_empty){
 
     Tree<int> tree;
-    Tree<int> res = tree.map([](int x){return x + 10;});
+    Tree<int> res = tree.map<int>([](int x){return x + 10;});
 
     EXPECT_THROW(res.get_root(), root_is_empty);
 

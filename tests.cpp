@@ -1050,3 +1050,70 @@ TEST(TestTree, custom_comparator){
     EXPECT_TRUE(tree.find(5));
 
 }
+
+TEST(TestTree, custom_comparator_avl){
+
+    Tree<int, std::greater<int>> tree;
+
+    tree.add(10);
+    tree.add(20);
+    tree.add(30);
+
+    EXPECT_EQ(tree.get_root(), 20);
+    EXPECT_EQ(tree.to_string(), "20 30 10 ");
+
+}
+
+TEST(TestTree, custom_comparator_remove){
+
+    Tree<int, std::greater<int>> tree;
+
+    tree.add(20);
+    tree.add(30);
+    tree.add(10);
+
+    EXPECT_TRUE(tree.remove(20));
+    EXPECT_FALSE(tree.find(20));
+    EXPECT_TRUE(tree.find(30));
+    EXPECT_TRUE(tree.find(10));
+    EXPECT_EQ(tree.get_count(), 2);
+
+}
+
+TEST(TestTree, custom_comparator_map){
+
+    Tree<int, std::greater<>> tree;
+
+    tree.add(10);
+    tree.add(20);
+    tree.add(5);
+
+    auto res = tree.map<double>([](int x){return x / 2.0;});
+
+    EXPECT_EQ(res.to_string(), "5 10 2.5 ");
+    EXPECT_EQ(tree.to_string(), "10 20 5 ");
+
+}
+
+TEST(TestTree, custom2_comparator_avl){
+
+    struct ABSCompare{
+
+        bool operator()(const int& a, const int& b) const{
+
+            return std::abs(a) < std::abs(b);
+
+        }
+
+    };
+
+    Tree<int, ABSCompare> tree;
+
+    tree.add(-10);
+    tree.add(20);
+    tree.add(-30);
+
+    EXPECT_EQ(tree.get_root(), 20);
+    EXPECT_EQ(tree.to_string(), "20 -10 -30 ");
+
+}
